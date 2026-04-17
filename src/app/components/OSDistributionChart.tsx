@@ -8,7 +8,13 @@ const data = [
   { version: '14.0', count: 2 }
 ];
 
-const colors = ['#F4D03F', '#E67E50', '#EF9A9A', '#A89F94'];
+const colors = ['#FFD93D', '#FF6B35', '#FF8E9E', '#6C5CE7'];
+const glowColors = [
+  'rgba(255, 217, 61, 0.4)',
+  'rgba(255, 107, 53, 0.4)',
+  'rgba(255, 142, 158, 0.4)',
+  'rgba(108, 92, 231, 0.4)'
+];
 
 export function OSDistributionChart() {
   return (
@@ -52,15 +58,22 @@ export function OSDistributionChart() {
 
       <div className="mt-4 flex items-center justify-between text-xs">
         {data.map((item, index) => (
-          <div key={item.version} className="flex items-center gap-2">
+          <motion.div
+            key={item.version}
+            className="flex items-center gap-2"
+            whileHover={{ scale: 1.05 }}
+          >
             <div
-              className="w-3 h-3 rounded"
-              style={{ backgroundColor: colors[index] }}
+              className="w-3 h-3 rounded animate-pulse"
+              style={{
+                backgroundColor: colors[index],
+                boxShadow: `0 0 8px ${glowColors[index]}`
+              }}
             />
             <span className="text-[var(--muted-foreground)]">
               {item.version}: <span className="text-[var(--foreground)] font-medium">{item.count}</span>
             </span>
-          </div>
+          </motion.div>
         ))}
       </div>
     </motion.div>

@@ -88,15 +88,38 @@ export function DeviceTable() {
         <h3 className="text-lg font-medium text-[var(--foreground)]">Device Inventory</h3>
 
         <div className="flex gap-2">
-          <button className="px-4 py-2 rounded-[0.75rem] bg-[var(--charcoal-accent)] text-white text-sm hover:opacity-90 transition-opacity">
+          <motion.button
+            className="px-4 py-2 rounded-[0.75rem] bg-[var(--charcoal-accent)] text-white text-sm transition-all duration-300"
+            whileHover={{
+              scale: 1.05,
+              boxShadow: '0 0 20px var(--charcoal-glow)'
+            }}
+            whileTap={{ scale: 0.95 }}
+          >
             All Devices
-          </button>
-          <button className="px-4 py-2 rounded-[0.75rem] bg-[var(--background)] text-[var(--foreground)] text-sm border border-[var(--border)] hover:border-[var(--foreground)] transition-colors">
+          </motion.button>
+          <motion.button
+            className="px-4 py-2 rounded-[0.75rem] bg-[var(--background)] text-[var(--foreground)] text-sm border border-[var(--border)] transition-all duration-300"
+            whileHover={{
+              scale: 1.05,
+              borderColor: 'var(--green-accent)',
+              boxShadow: '0 0 15px var(--green-glow)'
+            }}
+            whileTap={{ scale: 0.95 }}
+          >
             Online Only
-          </button>
-          <button className="px-4 py-2 rounded-[0.75rem] bg-[var(--background)] text-[var(--foreground)] text-sm border border-[var(--border)] hover:border-[var(--foreground)] transition-colors">
+          </motion.button>
+          <motion.button
+            className="px-4 py-2 rounded-[0.75rem] bg-[var(--background)] text-[var(--foreground)] text-sm border border-[var(--border)] transition-all duration-300"
+            whileHover={{
+              scale: 1.05,
+              borderColor: 'var(--orange-accent)',
+              boxShadow: '0 0 15px var(--orange-glow)'
+            }}
+            whileTap={{ scale: 0.95 }}
+          >
             Needs Update
-          </button>
+          </motion.button>
         </div>
       </div>
 
@@ -137,7 +160,13 @@ export function DeviceTable() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
-                className="border-b border-[var(--border)] last:border-0 hover:bg-[var(--background)] transition-colors"
+                whileHover={{
+                  backgroundColor: 'var(--background)',
+                  boxShadow: device.status === 'online'
+                    ? '0 0 15px var(--green-glow)'
+                    : '0 0 10px rgba(0,0,0,0.05)'
+                }}
+                className="border-b border-[var(--border)] last:border-0 transition-all duration-300"
               >
                 <td className="py-4 px-4">
                   <span className="font-medium text-sm text-[var(--foreground)]">
@@ -158,16 +187,25 @@ export function DeviceTable() {
                 </td>
                 <td className="py-4 px-4">
                   <span
-                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium ${
+                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium relative ${
                       device.status === 'online'
                         ? 'bg-green-100 text-green-800'
                         : 'bg-gray-100 text-gray-600'
                     }`}
+                    style={
+                      device.status === 'online'
+                        ? {
+                            boxShadow: '0 0 15px rgba(78, 205, 196, 0.4)',
+                            animation: 'glow 2s ease-in-out infinite'
+                          }
+                        : undefined
+                    }
                   >
                     <Circle
                       size={6}
                       fill="currentColor"
                       strokeWidth={0}
+                      className={device.status === 'online' ? 'animate-pulse' : ''}
                     />
                     {device.status === 'online' ? 'Online' : 'Offline'}
                   </span>
@@ -191,14 +229,22 @@ export function DeviceTable() {
                 </td>
                 <td className="py-4 px-4 text-right">
                   {device.status === 'online' ? (
-                    <a
+                    <motion.a
                       href={`vnc://${device.ipAddress}`}
-                      className="inline-flex items-center gap-2 px-3 py-1.5 bg-[var(--charcoal-accent)] text-white rounded-lg text-xs hover:opacity-90 transition-opacity"
+                      className="inline-flex items-center gap-2 px-3 py-1.5 bg-[var(--charcoal-accent)] text-white rounded-lg text-xs transition-all duration-300 relative overflow-hidden group"
                       title="Connect via Apple Remote Desktop"
+                      whileHover={{ scale: 1.05, boxShadow: '0 0 20px var(--charcoal-glow)' }}
+                      whileTap={{ scale: 0.95 }}
                     >
-                      <Monitor size={14} strokeWidth={2} />
+                      <motion.div
+                        whileHover={{ rotate: 360 }}
+                        transition={{ duration: 0.5 }}
+                      >
+                        <Monitor size={14} strokeWidth={2} />
+                      </motion.div>
                       Connect
-                    </a>
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 group-hover:animate-[shimmer_1.5s_ease-in-out]" />
+                    </motion.a>
                   ) : (
                     <span className="text-xs text-[var(--muted-foreground)]">Offline</span>
                   )}

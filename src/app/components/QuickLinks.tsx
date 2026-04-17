@@ -2,12 +2,12 @@ import { ExternalLink } from 'lucide-react';
 import { motion } from 'motion/react';
 
 const links = [
-  { name: 'Gap KB', url: '#', description: 'Knowledge Base' },
-  { name: 'Jamf Pro', url: '#', description: 'Device Management' },
-  { name: 'Apple Business Manager', url: '#', description: 'ABM Portal' },
-  { name: 'Capture One Docs', url: '#', description: 'Documentation' },
-  { name: 'Gap IT Helpdesk', url: '#', description: 'Support Portal' },
-  { name: 'Resilio Sync', url: '#', description: 'File Sync' }
+  { name: 'Gap KB', url: '#', description: 'Knowledge Base', color: '#6C5CE7' },
+  { name: 'Jamf Pro', url: '#', description: 'Device Management', color: '#FF6B35' },
+  { name: 'Apple Business Manager', url: '#', description: 'ABM Portal', color: '#4ECDC4' },
+  { name: 'Capture One Docs', url: '#', description: 'Documentation', color: '#FFD93D' },
+  { name: 'Gap IT Helpdesk', url: '#', description: 'Support Portal', color: '#FF8E9E' },
+  { name: 'Resilio Sync', url: '#', description: 'File Sync', color: '#A29BFE' }
 ];
 
 export function QuickLinks() {
@@ -29,9 +29,29 @@ export function QuickLinks() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4, delay: index * 0.05 }}
-            className="group flex items-center justify-between p-4 rounded-[0.875rem] bg-[var(--background)] border border-[var(--border)] hover:border-[var(--foreground)] hover:shadow-sm transition-all duration-300"
+            whileHover={{
+              scale: 1.03,
+              boxShadow: `0 0 20px ${link.color}40, 0 4px 15px rgba(0,0,0,0.1)`
+            }}
+            whileTap={{ scale: 0.98 }}
+            className="group flex items-center justify-between p-4 rounded-[0.875rem] bg-[var(--background)] border border-[var(--border)] transition-all duration-300 relative overflow-hidden"
+            style={{
+              borderColor: 'var(--border)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = link.color;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'var(--border)';
+            }}
           >
-            <div>
+            {/* Color accent bar */}
+            <div
+              className="absolute left-0 top-0 bottom-0 w-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              style={{ backgroundColor: link.color }}
+            />
+
+            <div className="relative z-10">
               <div className="font-medium text-sm text-[var(--foreground)] mb-0.5">
                 {link.name}
               </div>
@@ -39,11 +59,19 @@ export function QuickLinks() {
                 {link.description}
               </div>
             </div>
-            <ExternalLink
-              size={16}
-              className="text-[var(--muted-foreground)] group-hover:text-[var(--foreground)] transition-colors"
-              strokeWidth={2}
-            />
+            <motion.div
+              whileHover={{ x: 3, rotate: 45 }}
+              transition={{ duration: 0.2 }}
+            >
+              <ExternalLink
+                size={16}
+                className="text-[var(--muted-foreground)] group-hover:text-[var(--foreground)] transition-colors"
+                strokeWidth={2}
+                style={{
+                  color: link.color
+                }}
+              />
+            </motion.div>
           </motion.a>
         ))}
       </div>

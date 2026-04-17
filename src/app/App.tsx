@@ -16,7 +16,12 @@ import {
 
 export default function App() {
   return (
-    <div className="size-full flex bg-[var(--background)]">
+    <div className="size-full flex bg-[var(--background)] relative overflow-hidden">
+      {/* Animated background gradient orbs */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-[var(--yellow-accent)] to-[var(--orange-accent)] rounded-full opacity-5 blur-3xl animate-float" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-[var(--blue-accent)] to-[var(--green-accent)] rounded-full opacity-5 blur-3xl animate-float" style={{ animationDelay: '1s' }} />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-gradient-to-r from-[var(--coral-accent)] to-[var(--blue-accent)] rounded-full opacity-5 blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+
       <Sidebar />
 
       <div className="flex-1 flex flex-col overflow-hidden">

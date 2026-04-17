@@ -1,5 +1,6 @@
 import { Search, Calendar } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
 
 export function Header() {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -27,23 +28,45 @@ export function Header() {
       </div>
 
       <div className="flex items-center gap-4">
-        <div className="relative">
-          <Search
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)]"
-            size={18}
-            strokeWidth={2}
-          />
+        <motion.div
+          className="relative"
+          whileHover={{ scale: 1.02 }}
+        >
+          <motion.div
+            className="absolute left-4 top-1/2 -translate-y-1/2"
+            whileHover={{ rotate: 15, scale: 1.1 }}
+          >
+            <Search
+              className="text-[var(--muted-foreground)] transition-colors"
+              size={18}
+              strokeWidth={2}
+            />
+          </motion.div>
           <input
             type="text"
             placeholder="Search devices, docs..."
-            className="pl-12 pr-6 py-3 w-80 rounded-[0.875rem] bg-[var(--background)] border border-[var(--border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ring)] transition-all"
+            className="pl-12 pr-6 py-3 w-80 rounded-[0.875rem] bg-[var(--background)] border border-[var(--border)] text-sm focus:outline-none transition-all"
+            style={{
+              transition: 'all 0.3s ease'
+            }}
+            onFocus={(e) => {
+              e.target.style.boxShadow = '0 0 0 3px var(--blue-glow), 0 0 25px var(--blue-glow)';
+              e.target.style.borderColor = 'var(--blue-accent)';
+            }}
+            onBlur={(e) => {
+              e.target.style.boxShadow = 'none';
+              e.target.style.borderColor = 'var(--border)';
+            }}
           />
-        </div>
+        </motion.div>
 
-        <div className="flex items-center gap-2 px-4 py-3 rounded-[0.875rem] bg-[var(--background)] border border-[var(--border)]">
+        <motion.div
+          className="flex items-center gap-2 px-4 py-3 rounded-[0.875rem] bg-[var(--background)] border border-[var(--border)]"
+          whileHover={{ scale: 1.05, boxShadow: '0 4px 15px rgba(0,0,0,0.08)' }}
+        >
           <Calendar size={16} className="text-[var(--muted-foreground)]" strokeWidth={2} />
           <span className="text-sm text-[var(--foreground)]">{formatDate(currentTime)}</span>
-        </div>
+        </motion.div>
       </div>
     </header>
   );

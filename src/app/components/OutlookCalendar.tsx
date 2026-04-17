@@ -46,6 +46,8 @@ const mockEvents: CalendarEvent[] = [
   }
 ];
 
+const eventColors = ['#FF6B35', '#4ECDC4', '#6C5CE7', '#FFD93D'];
+
 export function OutlookCalendar() {
   const today = new Date().toLocaleDateString('en-US', {
     weekday: 'long',
@@ -75,38 +77,58 @@ export function OutlookCalendar() {
       </div>
 
       <div className="space-y-3">
-        {mockEvents.map((event, index) => (
-          <motion.div
-            key={event.id}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
-            className="p-4 rounded-[1.125rem] bg-[var(--background)] border border-[var(--border)] hover:border-[var(--charcoal-accent)] transition-all duration-300 group"
-          >
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <div className="font-medium text-sm text-[var(--foreground)] mb-2">
-                  {event.title}
-                </div>
-                <div className="flex items-center gap-4 text-xs text-[var(--muted-foreground)]">
-                  <div className="flex items-center gap-1.5">
-                    <Clock size={12} strokeWidth={2} />
-                    <span>{event.start} - {event.end}</span>
+        {mockEvents.map((event, index) => {
+          const color = eventColors[index % eventColors.length];
+          return (
+            <motion.div
+              key={event.id}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
+              whileHover={{
+                scale: 1.02,
+                x: 4,
+                boxShadow: `0 0 20px ${color}30, 0 4px 15px rgba(0,0,0,0.1)`
+              }}
+              className="p-4 rounded-[1.125rem] bg-[var(--background)] border border-[var(--border)] transition-all duration-300 group relative overflow-hidden"
+            >
+              {/* Color accent bar */}
+              <div
+                className="absolute left-0 top-0 bottom-0 w-1.5 transition-all duration-300"
+                style={{ backgroundColor: color }}
+              />
+
+              <div className="flex items-start justify-between pl-3">
+                <div className="flex-1">
+                  <div className="font-medium text-sm text-[var(--foreground)] mb-2">
+                    {event.title}
                   </div>
-                  {event.location && (
-                    <div className="flex items-center gap-1.5">
-                      <MapPin size={12} strokeWidth={2} />
-                      <span>{event.location}</span>
-                    </div>
-                  )}
+                  <div className="flex items-center gap-4 text-xs text-[var(--muted-foreground)]">
+                    <motion.div
+                      className="flex items-center gap-1.5"
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      <Clock size={12} strokeWidth={2} style={{ color }} />
+                      <span>{event.start} - {event.end}</span>
+                    </motion.div>
+                    {event.location && (
+                      <motion.div
+                        className="flex items-center gap-1.5"
+                        whileHover={{ scale: 1.05 }}
+                      >
+                        <MapPin size={12} strokeWidth={2} style={{ color }} />
+                        <span>{event.location}</span>
+                      </motion.div>
+                    )}
+                  </div>
+                </div>
+                <div className="text-xs text-[var(--muted-foreground)] ml-4">
+                  {event.organizer}
                 </div>
               </div>
-              <div className="text-xs text-[var(--muted-foreground)] ml-4">
-                {event.organizer}
-              </div>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          );
+        })}
       </div>
 
       <div className="mt-4 p-3 rounded-[0.875rem] bg-[var(--background)] border border-[var(--border)] text-center">

@@ -10,6 +10,7 @@ import {
   Settings
 } from 'lucide-react';
 import { useState } from 'react';
+import { motion } from 'motion/react';
 
 const navItems = [
   { icon: Home, label: 'Home', id: 'home' },
@@ -33,27 +34,40 @@ export function Sidebar() {
         const isActive = activeItem === item.id;
 
         return (
-          <button
+          <motion.button
             key={item.id}
             onClick={() => setActiveItem(item.id)}
             className={`
               w-14 h-14 rounded-[1.125rem] flex items-center justify-center
               transition-all duration-300 group relative
               ${isActive
-                ? 'bg-[var(--charcoal-accent)] text-white shadow-sm'
+                ? 'bg-[var(--charcoal-accent)] text-white'
                 : 'hover:bg-[var(--accent)] text-[var(--muted-foreground)]'}
             `}
             style={{
               animationDelay: `${index * 50}ms`,
-              animationFillMode: 'backwards'
+              animationFillMode: 'backwards',
+              boxShadow: isActive ? '0 0 20px var(--charcoal-glow)' : 'none'
             }}
+            whileHover={{ scale: 1.1, y: -2 }}
+            whileTap={{ scale: 0.95 }}
             aria-label={item.label}
           >
-            <Icon size={22} strokeWidth={1.8} />
-            <span className="absolute left-full ml-3 px-3 py-1.5 bg-[var(--charcoal-accent)] text-white text-sm rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity whitespace-nowrap">
+            <motion.div
+              animate={isActive ? { scale: [1, 1.2, 1] } : {}}
+              transition={{ duration: 0.3 }}
+            >
+              <Icon size={22} strokeWidth={1.8} />
+            </motion.div>
+            <motion.span
+              initial={{ opacity: 0, x: -10 }}
+              whileHover={{ opacity: 1, x: 0 }}
+              className="absolute left-full ml-3 px-3 py-1.5 bg-[var(--charcoal-accent)] text-white text-sm rounded-lg pointer-events-none whitespace-nowrap"
+              style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.2)' }}
+            >
               {item.label}
-            </span>
-          </button>
+            </motion.span>
+          </motion.button>
         );
       })}
     </aside>
