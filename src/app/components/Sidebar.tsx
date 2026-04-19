@@ -28,7 +28,18 @@ export function Sidebar() {
   const [activeItem, setActiveItem] = useState('dashboard');
 
   return (
-    <aside className="w-20 bg-[var(--neutral-card)] border-r border-[var(--border)] flex flex-col items-center py-6 gap-3">
+    <aside
+      className="w-[72px] flex flex-col items-center py-5 gap-1 relative"
+      style={{
+        background: 'var(--sidebar)',
+        borderRight: '1px solid var(--sidebar-border)',
+      }}
+    >
+      {/* Logo mark */}
+      <div className="mb-5 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'rgba(200, 167, 90, 0.1)', border: '1px solid rgba(200, 167, 90, 0.2)' }}>
+        <div className="w-4 h-4 rounded-sm" style={{ background: 'var(--gold-accent)' }} />
+      </div>
+
       {navItems.map((item, index) => {
         const Icon = item.icon;
         const isActive = activeItem === item.id;
@@ -37,39 +48,47 @@ export function Sidebar() {
           <motion.button
             key={item.id}
             onClick={() => setActiveItem(item.id)}
-            className={`
-              w-14 h-14 rounded-[1.125rem] flex items-center justify-center
-              transition-all duration-300 group relative
-              ${isActive
-                ? 'bg-[var(--charcoal-accent)] text-white'
-                : 'hover:bg-[var(--accent)] text-[var(--muted-foreground)]'}
-            `}
+            className="w-11 h-11 rounded-xl flex items-center justify-center transition-colors duration-200 group relative"
             style={{
-              animationDelay: `${index * 50}ms`,
-              animationFillMode: 'backwards',
-              boxShadow: isActive ? '0 0 20px var(--charcoal-glow)' : 'none'
+              background: isActive ? 'rgba(200, 167, 90, 0.12)' : 'transparent',
+              color: isActive ? 'var(--gold-accent)' : 'var(--sidebar-foreground)',
+              boxShadow: isActive ? '0 0 0 1px rgba(200, 167, 90, 0.2), 0 0 16px rgba(200, 167, 90, 0.08)' : 'none',
+              animationDelay: `${index * 40}ms`,
             }}
-            whileHover={{ scale: 1.1, y: -2 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.94 }}
             aria-label={item.label}
           >
-            <motion.div
-              animate={isActive ? { scale: [1, 1.2, 1] } : {}}
-              transition={{ duration: 0.3 }}
-            >
-              <Icon size={22} strokeWidth={1.8} />
-            </motion.div>
+            <Icon
+              size={18}
+              strokeWidth={isActive ? 2 : 1.6}
+            />
+
+            {/* Tooltip */}
             <motion.span
-              initial={{ opacity: 0, x: -10 }}
+              initial={{ opacity: 0, x: -6 }}
               whileHover={{ opacity: 1, x: 0 }}
-              className="absolute left-full ml-3 px-3 py-1.5 bg-[var(--charcoal-accent)] text-white text-sm rounded-lg pointer-events-none whitespace-nowrap"
-              style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.2)' }}
+              className="absolute left-full ml-3 px-2.5 py-1 text-xs rounded-lg pointer-events-none whitespace-nowrap z-50"
+              style={{
+                background: '#1A1D2B',
+                color: 'var(--foreground)',
+                border: '1px solid var(--border)',
+                boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+                fontWeight: 500,
+                letterSpacing: '0.01em',
+              }}
             >
               {item.label}
             </motion.span>
           </motion.button>
         );
       })}
+
+      {/* Bottom gold line indicator */}
+      <div
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 rounded-full mb-4"
+        style={{ background: 'linear-gradient(90deg, transparent, var(--gold-accent), transparent)', opacity: 0.4 }}
+      />
     </aside>
   );
 }

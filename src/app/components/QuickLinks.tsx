@@ -1,77 +1,81 @@
-import { ExternalLink } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { motion } from 'motion/react';
 
 const links = [
-  { name: 'Gap KB', url: '#', description: 'Knowledge Base', color: '#6C5CE7' },
-  { name: 'Jamf Pro', url: '#', description: 'Device Management', color: '#FF6B35' },
-  { name: 'Apple Business Manager', url: '#', description: 'ABM Portal', color: '#4ECDC4' },
-  { name: 'Capture One Docs', url: '#', description: 'Documentation', color: '#FFD93D' },
-  { name: 'Gap IT Helpdesk', url: '#', description: 'Support Portal', color: '#FF8E9E' },
-  { name: 'Resilio Sync', url: '#', description: 'File Sync', color: '#A29BFE' }
+  { name: 'Gap KB', url: '#', description: 'Knowledge Base', color: '#C8A75A' },
+  { name: 'Jamf Pro', url: '#', description: 'Device Management', color: '#F59E0B' },
+  { name: 'Apple Business Manager', url: '#', description: 'ABM Portal', color: '#2DD4BF' },
+  { name: 'Capture One Docs', url: '#', description: 'Documentation', color: '#7B82F0' },
+  { name: 'Gap IT Helpdesk', url: '#', description: 'Support Portal', color: '#F4637A' },
+  { name: 'Resilio Sync', url: '#', description: 'File Sync', color: '#A78BFA' },
 ];
 
 export function QuickLinks() {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.25 }}
-      whileHover={{ y: -4 }}
-      className="bg-[var(--neutral-card)] rounded-[1.5rem] p-7 border border-[var(--border)] shadow-sm hover:shadow-lg transition-shadow duration-300 cursor-default"
+      transition={{ duration: 0.45, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+      className="relative overflow-hidden"
+      style={{
+        background: 'var(--card)',
+        borderRadius: 'var(--radius)',
+        border: '1px solid var(--border)',
+        padding: '1.5rem',
+        boxShadow: '0 4px 24px rgba(0,0,0,0.3)',
+      }}
     >
-      <h3 className="text-lg font-medium mb-5 text-[var(--foreground)]">Quick Links</h3>
+      <div className="flex items-center justify-between mb-5">
+        <p className="text-[10px] font-semibold tracking-[0.14em] uppercase" style={{ color: 'var(--muted-foreground)' }}>
+          Quick Links
+        </p>
+      </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-2">
         {links.map((link, index) => (
           <motion.a
             key={link.name}
             href={link.url}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4, delay: index * 0.05 }}
-            whileHover={{
-              scale: 1.03,
-              boxShadow: `0 0 20px ${link.color}40, 0 4px 15px rgba(0,0,0,0.1)`
-            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, delay: index * 0.04 }}
+            whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="group flex items-center justify-between p-4 rounded-[0.875rem] bg-[var(--background)] border border-[var(--border)] transition-all duration-300 relative overflow-hidden"
+            className="group relative flex items-center justify-between p-3 rounded-lg overflow-hidden"
             style={{
-              borderColor: 'var(--border)'
+              background: 'var(--accent)',
+              border: '1px solid var(--border)',
+              transition: 'all 0.2s ease',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = link.color;
+              e.currentTarget.style.borderColor = `${link.color}40`;
+              e.currentTarget.style.background = `${link.color}08`;
+              e.currentTarget.style.boxShadow = `0 0 16px ${link.color}18`;
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.borderColor = 'var(--border)';
+              e.currentTarget.style.background = 'var(--accent)';
+              e.currentTarget.style.boxShadow = 'none';
             }}
           >
-            {/* Color accent bar */}
-            <div
-              className="absolute left-0 top-0 bottom-0 w-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              style={{ backgroundColor: link.color }}
-            />
+            {/* Color dot */}
+            <div className="w-1.5 h-1.5 rounded-full flex-shrink-0 mr-2.5" style={{ background: link.color }} />
 
-            <div className="relative z-10">
-              <div className="font-medium text-sm text-[var(--foreground)] mb-0.5">
+            <div className="flex-1 min-w-0">
+              <div className="font-medium text-xs truncate" style={{ color: 'var(--foreground)', letterSpacing: '0.01em' }}>
                 {link.name}
               </div>
-              <div className="text-xs text-[var(--muted-foreground)]">
+              <div className="text-[10px] truncate mt-0.5" style={{ color: 'var(--muted-foreground)' }}>
                 {link.description}
               </div>
             </div>
-            <motion.div
-              whileHover={{ x: 3, rotate: 45 }}
-              transition={{ duration: 0.2 }}
-            >
-              <ExternalLink
-                size={16}
-                className="text-[var(--muted-foreground)] group-hover:text-[var(--foreground)] transition-colors"
-                strokeWidth={2}
-                style={{
-                  color: link.color
-                }}
-              />
-            </motion.div>
+
+            <ArrowUpRight
+              size={13}
+              strokeWidth={2}
+              className="flex-shrink-0 ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+              style={{ color: link.color }}
+            />
           </motion.a>
         ))}
       </div>
