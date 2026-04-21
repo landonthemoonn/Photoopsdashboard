@@ -27,7 +27,7 @@ export function Inventory() {
     return matchesFilter && matchesSearch;
   });
 
-  const glassCard = { background: 'rgba(10,12,22,0.55)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 'var(--radius)', boxShadow: '0 4px 30px rgba(0,0,0,0.4)' };
+  const glassCard = { background: 'rgba(22,16,12,0.55)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 'var(--radius)', boxShadow: '0 4px 30px rgba(0,0,0,0.4)' };
 
   return (
     <div>
@@ -36,7 +36,7 @@ export function Inventory() {
           <p className="text-[11px] font-semibold tracking-[0.18em] uppercase mb-1" style={{ color: 'var(--neon-blue)' }}>Jamf Pro</p>
           <h1 className="text-2xl font-medium" style={{ color: 'var(--foreground)', letterSpacing: '-0.025em' }}>Device Inventory</h1>
         </div>
-        <a href={JAMF_URL} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all duration-200" style={{ background: 'rgba(0,180,255,0.1)', border: '1px solid rgba(0,180,255,0.2)', color: 'var(--neon-blue)' }}>
+        <a href={JAMF_URL} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all duration-200" style={{ background: 'rgba(224,112,96,0.1)', border: '1px solid rgba(224,112,96,0.2)', color: 'var(--neon-blue)' }}>
           <ExternalLink size={14} /> Open Jamf Pro
         </a>
       </motion.div>
@@ -44,10 +44,10 @@ export function Inventory() {
       {/* Summary pills */}
       <div className="grid grid-cols-4 gap-3 mb-5">
         {[
-          { label: 'Total Devices', value: devices.length, accent: '#00B4FF' },
-          { label: 'Online', value: devices.filter(d => d.status === 'online').length, accent: '#00FF90' },
-          { label: 'Offline', value: devices.filter(d => d.status === 'offline').length, accent: '#FF2D78' },
-          { label: 'Needs Update', value: devices.filter(d => d.updateStatus === 'needs-update').length, accent: '#FF9500' },
+          { label: 'Total Devices', value: devices.length, accent: '#E07060' },
+          { label: 'Online', value: devices.filter(d => d.status === 'online').length, accent: '#8FBF8A' },
+          { label: 'Offline', value: devices.filter(d => d.status === 'offline').length, accent: '#D86040' },
+          { label: 'Needs Update', value: devices.filter(d => d.updateStatus === 'needs-update').length, accent: '#E09040' },
         ].map((s, i) => (
           <motion.div key={s.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="p-4 rounded-xl" style={{ ...glassCard, borderColor: `${s.accent}25` }}>
             <p className="text-[10px] tracking-widest uppercase mb-1" style={{ color: 'var(--muted-foreground)' }}>{s.label}</p>
@@ -72,7 +72,7 @@ export function Inventory() {
 
         <div className="flex gap-1 p-1 rounded-lg" style={{ background: 'rgba(255,255,255,0.04)' }}>
           {(['all', 'online', 'offline', 'needs-update'] as Filter[]).map(f => (
-            <button key={f} onClick={() => setFilter(f)} className="px-3 py-1.5 rounded-md text-xs font-medium capitalize transition-all duration-200" style={{ background: filter === f ? 'rgba(0,180,255,0.12)' : 'transparent', color: filter === f ? 'var(--neon-blue)' : 'var(--muted-foreground)', border: filter === f ? '1px solid rgba(0,180,255,0.2)' : '1px solid transparent' }}>
+            <button key={f} onClick={() => setFilter(f)} className="px-3 py-1.5 rounded-md text-xs font-medium capitalize transition-all duration-200" style={{ background: filter === f ? 'rgba(224,112,96,0.12)' : 'transparent', color: filter === f ? 'var(--neon-blue)' : 'var(--muted-foreground)', border: filter === f ? '1px solid rgba(224,112,96,0.2)' : '1px solid transparent' }}>
               {f === 'needs-update' ? 'Needs Update' : f.charAt(0).toUpperCase() + f.slice(1)}
             </button>
           ))}
@@ -107,19 +107,19 @@ export function Inventory() {
                 <td className="py-3 px-4"><span className="text-xs font-mono" style={{ color: 'var(--muted-foreground)' }}>{device.ram}</span></td>
                 <td className="py-3 px-4"><span className="text-xs font-mono" style={{ color: 'var(--foreground)', opacity: 0.75 }}>{device.os}</span></td>
                 <td className="py-3 px-4">
-                  <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold" style={device.status === 'online' ? { background: 'rgba(0,255,144,0.1)', color: '#00FF90', border: '1px solid rgba(0,255,144,0.2)' } : { background: 'rgba(255,255,255,0.04)', color: 'var(--muted-foreground)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                  <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold" style={device.status === 'online' ? { background: 'rgba(143,191,138,0.1)', color: '#8FBF8A', border: '1px solid rgba(143,191,138,0.2)' } : { background: 'rgba(255,255,255,0.04)', color: 'var(--muted-foreground)', border: '1px solid rgba(255,255,255,0.06)' }}>
                     <Circle size={5} fill="currentColor" strokeWidth={0} className={device.status === 'online' ? 'animate-pulse' : ''} />
                     {device.status}
                   </span>
                 </td>
                 <td className="py-3 px-4">
-                  <span className="inline-flex items-center px-2 py-1 rounded-full text-[10px] font-semibold" style={device.updateStatus === 'current' ? { background: 'rgba(0,180,255,0.1)', color: '#00B4FF', border: '1px solid rgba(0,180,255,0.2)' } : { background: 'rgba(255,149,0,0.1)', color: '#FF9500', border: '1px solid rgba(255,149,0,0.2)' }}>
+                  <span className="inline-flex items-center px-2 py-1 rounded-full text-[10px] font-semibold" style={device.updateStatus === 'current' ? { background: 'rgba(224,112,96,0.1)', color: '#E07060', border: '1px solid rgba(224,112,96,0.2)' } : { background: 'rgba(224,144,64,0.1)', color: '#E09040', border: '1px solid rgba(224,144,64,0.2)' }}>
                     {device.updateStatus === 'current' ? 'Current' : 'Update'}
                   </span>
                 </td>
                 <td className="py-3 px-4 text-right">
                   {device.status === 'online' ? (
-                    <a href={`vnc://${device.ip}`} className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all" style={{ background: 'rgba(0,180,255,0.08)', color: 'var(--neon-blue)', border: '1px solid rgba(0,180,255,0.2)' }}>
+                    <a href={`vnc://${device.ip}`} className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all" style={{ background: 'rgba(224,112,96,0.08)', color: 'var(--neon-blue)', border: '1px solid rgba(224,112,96,0.2)' }}>
                       <Monitor size={11} /> Connect
                     </a>
                   ) : <span style={{ color: 'var(--muted-foreground)', opacity: 0.3 }} className="text-xs">—</span>}

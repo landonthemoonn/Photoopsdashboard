@@ -3,27 +3,27 @@ import { Wifi, Activity, AlertCircle, ArrowRight, Calendar, HardDrive } from 'lu
 import { Link } from 'react-router';
 
 const quickStats = [
-  { label: 'Macs Online', value: '21', accent: '#FFD60A', glow: 'rgba(255,214,10,0.2)' },
-  { label: 'In Production', value: '18', accent: '#FF9500', glow: 'rgba(255,149,0,0.2)' },
-  { label: 'System Health', value: '98%', accent: '#00E5FF', glow: 'rgba(0,229,255,0.2)' },
-  { label: 'Needs Update', value: '2', accent: '#FF2D78', glow: 'rgba(255,45,120,0.2)' },
+  { label: 'Macs Online', value: '21', accent: '#E8C070', glow: 'rgba(232,192,112,0.2)' },
+  { label: 'In Production', value: '18', accent: '#E09040', glow: 'rgba(224,144,64,0.2)' },
+  { label: 'System Health', value: '98%', accent: '#F0A870', glow: 'rgba(240,168,112,0.2)' },
+  { label: 'Needs Update', value: '2', accent: '#D86040', glow: 'rgba(216,96,64,0.2)' },
 ];
 
 const recentActivity = [
-  { time: '9:14 AM', event: 'Photo-Mac-02 came online', icon: Wifi, color: '#00FF90' },
-  { time: '8:52 AM', event: 'macOS 14.3 update pushed via Jamf', icon: HardDrive, color: '#00B4FF' },
-  { time: '8:30 AM', event: 'Production Shoot — Spring Collection started', icon: Activity, color: '#FFD60A' },
-  { time: 'Yesterday', event: 'Tech-Mac-01 went offline', icon: AlertCircle, color: '#FF2D78' },
-  { time: 'Yesterday', event: 'Checklist: Weekly maintenance completed', icon: Calendar, color: '#BF5AF2' },
+  { time: '9:14 AM', event: 'Photo-Mac-02 came online', icon: Wifi, color: '#8FBF8A' },
+  { time: '8:52 AM', event: 'macOS 14.3 update pushed via Jamf', icon: HardDrive, color: '#E07060' },
+  { time: '8:30 AM', event: 'Production Shoot — Spring Collection started', icon: Activity, color: '#E8C070' },
+  { time: 'Yesterday', event: 'Tech-Mac-01 went offline', icon: AlertCircle, color: '#D86040' },
+  { time: 'Yesterday', event: 'Checklist: Weekly maintenance completed', icon: Calendar, color: '#9888C8' },
 ];
 
 const shortcuts = [
-  { label: 'View All Devices', to: '/inventory', accent: '#00B4FF' },
-  { label: 'Open Checklists', to: '/checklists', accent: '#00FF90' },
-  { label: 'Browse SOPs', to: '/sops', accent: '#BF5AF2' },
-  { label: 'Studio Calendar', to: '/dashboard', accent: '#FFD60A' },
-  { label: 'Knowledge Base', to: '/kb', accent: '#FF9500' },
-  { label: 'Settings & Integrations', to: '/settings', accent: '#FF2D78' },
+  { label: 'View All Devices', to: '/inventory', accent: '#E07060' },
+  { label: 'Open Checklists', to: '/checklists', accent: '#8FBF8A' },
+  { label: 'Browse SOPs', to: '/sops', accent: '#9888C8' },
+  { label: 'Studio Calendar', to: '/dashboard', accent: '#E8C070' },
+  { label: 'Knowledge Base', to: '/kb', accent: '#E09040' },
+  { label: 'Settings & Integrations', to: '/settings', accent: '#D86040' },
 ];
 
 export function Home() {
@@ -57,7 +57,7 @@ export function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.06 }}
                 className="p-4 rounded-xl"
-                style={{ background: 'rgba(10,12,22,0.55)', backdropFilter: 'blur(24px)', border: `1px solid ${s.glow.replace('0.2', '0.25')}`, boxShadow: `0 4px 24px rgba(0,0,0,0.3)` }}
+                style={{ background: 'rgba(22,16,12,0.55)', backdropFilter: 'blur(24px)', border: `1px solid ${s.glow.replace('0.2', '0.25')}`, boxShadow: `0 4px 24px rgba(0,0,0,0.3)` }}
               >
                 <p className="text-[10px] tracking-widest uppercase mb-2" style={{ color: 'var(--muted-foreground)' }}>{s.label}</p>
                 <p className="text-3xl font-light font-mono" style={{ color: s.accent, textShadow: `0 0 16px ${s.glow}` }}>{s.value}</p>
@@ -73,7 +73,7 @@ export function Home() {
                 <Link
                   to={s.to}
                   className="flex items-center justify-between p-3 rounded-xl group transition-all duration-200"
-                  style={{ background: 'rgba(10,12,22,0.55)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.06)' }}
+                  style={{ background: 'rgba(22,16,12,0.55)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.06)' }}
                   onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = `${s.accent}40`; (e.currentTarget as HTMLElement).style.boxShadow = `0 0 20px ${s.accent}15`; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.06)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none'; }}
                 >
@@ -88,7 +88,7 @@ export function Home() {
         {/* Recent activity */}
         <div>
           <p className="text-[10px] font-semibold tracking-[0.14em] uppercase mb-3" style={{ color: 'var(--muted-foreground)' }}>Recent Activity</p>
-          <div className="rounded-xl overflow-hidden" style={{ background: 'rgba(10,12,22,0.55)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.06)' }}>
+          <div className="rounded-xl overflow-hidden" style={{ background: 'rgba(22,16,12,0.55)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.06)' }}>
             {recentActivity.map((item, i) => {
               const Icon = item.icon;
               return (

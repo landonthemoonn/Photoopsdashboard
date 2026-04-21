@@ -7,7 +7,7 @@ const integrations = [
     description: 'MDM — Device management, policies, and inventory',
     url: 'https://gapinc.jamfcloud.com',
     status: 'needs-config',
-    color: '#00B4FF',
+    color: '#E07060',
     fields: [
       { label: 'Instance URL', value: 'https://gapinc.jamfcloud.com', editable: false },
       { label: 'Username', value: '(not set)', editable: true },
@@ -19,7 +19,7 @@ const integrations = [
     description: 'Calendar sync for studio shoot schedules',
     url: 'https://outlook.office.com',
     status: 'needs-config',
-    color: '#00B4FF',
+    color: '#E07060',
     fields: [
       { label: 'Tenant ID', value: '(not set)', editable: true },
       { label: 'Client ID', value: '(not set)', editable: true },
@@ -31,7 +31,7 @@ const integrations = [
     description: 'Device enrollment and app licensing',
     url: 'https://business.apple.com',
     status: 'needs-config',
-    color: '#BF5AF2',
+    color: '#9888C8',
     fields: [
       { label: 'Organization ID', value: '(not set)', editable: true },
       { label: 'API Key', value: '(not set)', editable: true, secret: true },
@@ -42,7 +42,7 @@ const integrations = [
     description: 'P2P file sync across studio nodes',
     url: 'http://10.0.1.1:8888',
     status: 'needs-config',
-    color: '#00FF90',
+    color: '#8FBF8A',
     fields: [
       { label: 'Management URL', value: 'http://10.0.1.1:8888', editable: true },
       { label: 'API Key', value: '(not set)', editable: true, secret: true },
@@ -53,7 +53,7 @@ const integrations = [
     description: 'Internal IT ticketing and support portal',
     url: 'https://gapinc.service-now.com',
     status: 'link-only',
-    color: '#FF9500',
+    color: '#E09040',
     fields: [],
   },
   {
@@ -61,19 +61,19 @@ const integrations = [
     description: 'Photo editing — docs and license management',
     url: 'https://support.captureone.com',
     status: 'link-only',
-    color: '#FFD60A',
+    color: '#E8C070',
     fields: [],
   },
 ];
 
 const statusConfig = {
-  connected: { label: 'Connected', color: '#00FF90', icon: CheckCircle },
-  'needs-config': { label: 'Needs Config', color: '#FF9500', icon: AlertCircle },
+  connected: { label: 'Connected', color: '#8FBF8A', icon: CheckCircle },
+  'needs-config': { label: 'Needs Config', color: '#E09040', icon: AlertCircle },
   'link-only': { label: 'Link Only', color: '#4B5060', icon: Clock },
 };
 
 export function Settings() {
-  const glass = { background: 'rgba(10,12,22,0.55)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 'var(--radius)' };
+  const glass = { background: 'rgba(22,16,12,0.55)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 'var(--radius)' };
 
   return (
     <div>
@@ -83,7 +83,7 @@ export function Settings() {
           <h1 className="text-2xl font-medium" style={{ color: 'var(--foreground)', letterSpacing: '-0.025em' }}>Settings & Integrations</h1>
           <p className="text-sm mt-1" style={{ color: 'var(--muted-foreground)' }}>Connect your studio tools. All credentials stored securely via Supabase.</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all" style={{ background: 'rgba(0,180,255,0.08)', border: '1px solid rgba(0,180,255,0.15)', color: 'var(--neon-blue)' }}>
+        <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all" style={{ background: 'rgba(224,112,96,0.08)', border: '1px solid rgba(224,112,96,0.15)', color: 'var(--neon-blue)' }}>
           <RefreshCw size={14} /> Test All Connections
         </button>
       </motion.div>
@@ -91,8 +91,8 @@ export function Settings() {
       {/* Status summary */}
       <div className="grid grid-cols-3 gap-3 mb-6">
         {[
-          { label: 'Connected', count: integrations.filter(i => i.status === 'connected').length, color: '#00FF90' },
-          { label: 'Needs Config', count: integrations.filter(i => i.status === 'needs-config').length, color: '#FF9500' },
+          { label: 'Connected', count: integrations.filter(i => i.status === 'connected').length, color: '#8FBF8A' },
+          { label: 'Needs Config', count: integrations.filter(i => i.status === 'needs-config').length, color: '#E09040' },
           { label: 'Link Only', count: integrations.filter(i => i.status === 'link-only').length, color: '#4B5060' },
         ].map((s, i) => (
           <motion.div key={s.label} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="p-4 rounded-xl" style={glass}>
@@ -159,7 +159,7 @@ export function Settings() {
       </div>
 
       {/* Supabase note */}
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="mt-5 p-4 rounded-xl flex items-center gap-3" style={{ background: 'rgba(0,180,255,0.04)', border: '1px solid rgba(0,180,255,0.1)' }}>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="mt-5 p-4 rounded-xl flex items-center gap-3" style={{ background: 'rgba(224,112,96,0.04)', border: '1px solid rgba(224,112,96,0.1)' }}>
         <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: 'var(--neon-blue)', opacity: 0.6 }} />
         <p className="text-xs" style={{ color: 'var(--muted-foreground)' }}>
           Credentials will be stored encrypted via <span style={{ color: 'var(--neon-blue)' }}>Supabase</span> and proxied server-side — never exposed to the browser. Backend integration coming next.

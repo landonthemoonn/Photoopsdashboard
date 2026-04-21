@@ -15,12 +15,12 @@ const articles = [
 
 const categories = ['All', 'Setup', 'IT Setup', 'Troubleshooting', 'File Sync', 'Network', 'Operations'];
 const categoryColors: Record<string, string> = {
-  'Setup': '#00B4FF',
-  'IT Setup': '#BF5AF2',
-  'Troubleshooting': '#FF2D78',
-  'File Sync': '#00E5FF',
-  'Network': '#FF9500',
-  'Operations': '#00FF90',
+  'Setup': '#E07060',
+  'IT Setup': '#9888C8',
+  'Troubleshooting': '#D86040',
+  'File Sync': '#F0A870',
+  'Network': '#E09040',
+  'Operations': '#8FBF8A',
 };
 
 export function KnowledgeBase() {
@@ -33,7 +33,7 @@ export function KnowledgeBase() {
     return matchesCat && matchesSearch;
   });
 
-  const glass = { background: 'rgba(10,12,22,0.55)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 'var(--radius)' };
+  const glass = { background: 'rgba(22,16,12,0.55)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 'var(--radius)' };
 
   return (
     <div>
@@ -52,7 +52,7 @@ export function KnowledgeBase() {
           onChange={e => setSearch(e.target.value)}
           className="w-full pl-11 pr-4 py-3 text-sm rounded-xl focus:outline-none transition-all"
           style={{ ...glass, borderRadius: '0.75rem', color: 'var(--foreground)' }}
-          onFocus={e => { (e.target as HTMLElement).style.borderColor = 'rgba(0,180,255,0.3)'; (e.target as HTMLElement).style.boxShadow = '0 0 20px rgba(0,180,255,0.1)'; }}
+          onFocus={e => { (e.target as HTMLElement).style.borderColor = 'rgba(224,112,96,0.3)'; (e.target as HTMLElement).style.boxShadow = '0 0 20px rgba(224,112,96,0.1)'; }}
           onBlur={e => { (e.target as HTMLElement).style.borderColor = 'rgba(255,255,255,0.07)'; (e.target as HTMLElement).style.boxShadow = 'none'; }}
         />
       </motion.div>
@@ -60,7 +60,7 @@ export function KnowledgeBase() {
       {/* Category pills */}
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.15 }} className="flex gap-2 flex-wrap mb-5">
         {categories.map(cat => (
-          <button key={cat} onClick={() => setCategory(cat)} className="px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200" style={{ background: category === cat ? 'rgba(0,180,255,0.12)' : 'rgba(255,255,255,0.04)', color: category === cat ? 'var(--neon-blue)' : 'var(--muted-foreground)', border: category === cat ? '1px solid rgba(0,180,255,0.25)' : '1px solid rgba(255,255,255,0.06)' }}>
+          <button key={cat} onClick={() => setCategory(cat)} className="px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200" style={{ background: category === cat ? 'rgba(224,112,96,0.12)' : 'rgba(255,255,255,0.04)', color: category === cat ? 'var(--neon-blue)' : 'var(--muted-foreground)', border: category === cat ? '1px solid rgba(224,112,96,0.25)' : '1px solid rgba(255,255,255,0.06)' }}>
             {cat}
           </button>
         ))}
@@ -98,8 +98,8 @@ export function KnowledgeBase() {
             onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)'}
             onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}
           >
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: `${categoryColors[article.category] || '#00B4FF'}12` }}>
-              <BookOpen size={14} style={{ color: categoryColors[article.category] || '#00B4FF' }} />
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: `${categoryColors[article.category] || '#E07060'}12` }}>
+              <BookOpen size={14} style={{ color: categoryColors[article.category] || '#E07060' }} />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium truncate" style={{ color: 'var(--foreground)' }}>{article.title}</p>

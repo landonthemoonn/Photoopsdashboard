@@ -10,7 +10,7 @@ const initialChecklists: Checklist[] = [
     id: 'startup',
     title: 'Daily Startup',
     description: 'Run every morning before first production shoot',
-    color: '#00FF90',
+    color: '#8FBF8A',
     items: [
       { id: 's1', label: 'Power on all stage Macs', done: false },
       { id: 's2', label: 'Verify all Macs appear online in Jamf', done: false },
@@ -26,7 +26,7 @@ const initialChecklists: Checklist[] = [
     id: 'laydown',
     title: 'Production Laydown',
     description: 'End-of-day shutdown procedure',
-    color: '#00B4FF',
+    color: '#E07060',
     items: [
       { id: 'l1', label: 'Export and back up all shoot sessions', done: false },
       { id: 'l2', label: 'Verify Resilio Sync has completed transfers', done: false },
@@ -40,7 +40,7 @@ const initialChecklists: Checklist[] = [
     id: 'weekly',
     title: 'Weekly Maintenance',
     description: 'Every Monday morning',
-    color: '#BF5AF2',
+    color: '#9888C8',
     items: [
       { id: 'w1', label: 'Check for pending macOS updates in Jamf', done: false },
       { id: 'w2', label: 'Review Jamf policy failures from prior week', done: false },
@@ -62,7 +62,7 @@ function ChecklistCard({ checklist }: { checklist: Checklist }) {
   const pct = Math.round((done / items.length) * 100);
 
   return (
-    <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl overflow-hidden" style={{ background: 'rgba(10,12,22,0.55)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: `1px solid ${checklist.color}20`, boxShadow: '0 4px 24px rgba(0,0,0,0.3)' }}>
+    <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl overflow-hidden" style={{ background: 'rgba(22,16,12,0.55)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: `1px solid ${checklist.color}20`, boxShadow: '0 4px 24px rgba(0,0,0,0.3)' }}>
       {/* Header */}
       <button onClick={() => setOpen(o => !o)} className="w-full flex items-start justify-between p-5 text-left">
         <div className="flex items-start gap-3">

@@ -8,16 +8,16 @@ const data = [
   { version: '14.0', count: 2 },
 ];
 
-const colors = ['#00B4FF', '#BF5AF2', '#00E5FF', '#FF2D78'];
+const colors = ['#E07060', '#9888C8', '#F0A870', '#E09040'];
 
 const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: { value: number }[]; label?: string }) => {
   if (active && payload?.length) {
     return (
-      <div className="px-3 py-2 rounded-lg text-xs" style={{ background: 'rgba(10,12,22,0.95)', border: '1px solid rgba(0,180,255,0.2)', color: 'var(--foreground)', boxShadow: '0 8px 24px rgba(0,0,0,0.6)', backdropFilter: 'blur(12px)' }}>
+      <div className="px-3 py-2 rounded-lg text-xs" style={{ background: 'rgba(22,16,12,0.95)', border: '1px solid rgba(224,112,96,0.2)', color: 'var(--foreground)', boxShadow: '0 8px 24px rgba(0,0,0,0.6)', backdropFilter: 'blur(12px)' }}>
         <span style={{ color: 'var(--muted-foreground)' }}>macOS </span>
         <span className="font-semibold">{label}</span>
         <span style={{ color: 'var(--muted-foreground)' }}> — </span>
-        <span className="font-semibold" style={{ color: '#00B4FF' }}>{payload[0].value} devices</span>
+        <span className="font-semibold" style={{ color: '#E07060' }}>{payload[0].value} devices</span>
       </div>
     );
   }
@@ -31,9 +31,9 @@ export function OSDistributionChart() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
       className="relative overflow-hidden cursor-default"
-      style={{ background: 'rgba(10,12,22,0.55)', backdropFilter: 'blur(24px) saturate(160%)', WebkitBackdropFilter: 'blur(24px) saturate(160%)', borderRadius: 'var(--radius)', border: '1px solid rgba(0,180,255,0.15)', padding: '1.5rem', boxShadow: '0 4px 30px rgba(0,0,0,0.4)' }}
+      style={{ background: 'rgba(22,16,12,0.6)', backdropFilter: 'blur(28px) saturate(140%)', WebkitBackdropFilter: 'blur(28px) saturate(140%)', borderRadius: 'var(--radius)', border: '1px solid rgba(224,112,96,0.15)', padding: '1.5rem', boxShadow: '0 4px 30px rgba(0,0,0,0.5)' }}
     >
-      <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(0,180,255,0.5), transparent)' }} />
+      <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(224,112,96,0.5), transparent)' }} />
 
       <div className="mb-5">
         <p className="text-[10px] font-semibold tracking-[0.14em] uppercase mb-0.5" style={{ color: 'var(--muted-foreground)' }}>macOS Distribution</p>
@@ -45,7 +45,7 @@ export function OSDistributionChart() {
           <CartesianGrid strokeDasharray="2 4" stroke="rgba(255,255,255,0.03)" vertical={false} />
           <XAxis dataKey="version" tick={{ fill: '#4B5060', fontSize: 11, fontFamily: 'DM Mono, monospace' }} axisLine={false} tickLine={false} />
           <YAxis tick={{ fill: '#4B5060', fontSize: 11, fontFamily: 'DM Mono, monospace' }} axisLine={false} tickLine={false} />
-          <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(0,180,255,0.04)' }} />
+          <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(224,112,96,0.04)' }} />
           <Bar dataKey="count" radius={[6, 6, 0, 0]} maxBarSize={44}>
             {data.map((entry, index) => (
               <Cell key={`cell-${entry.version}`} fill={colors[index % colors.length]} fillOpacity={0.85} />

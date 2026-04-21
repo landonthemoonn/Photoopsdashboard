@@ -2,26 +2,26 @@ import { motion } from 'motion/react';
 import { FileText, ChevronRight, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 
 const sops = [
-  { id: 1, title: 'New Mac Enrollment — Jamf Pro', category: 'IT Setup', status: 'active', steps: 12, owner: 'Tech Team', updated: 'Apr 10', color: '#BF5AF2' },
-  { id: 2, title: 'Studio Startup Procedure', category: 'Operations', status: 'active', steps: 8, owner: 'Studio Team', updated: 'Apr 8', color: '#00FF90' },
-  { id: 3, title: 'Production Laydown — End of Day', category: 'Operations', status: 'active', steps: 6, owner: 'Studio Team', updated: 'Apr 5', color: '#00B4FF' },
-  { id: 4, title: 'Capture One Session Setup', category: 'Photo Ops', status: 'active', steps: 9, owner: 'Photo Team', updated: 'Apr 3', color: '#FFD60A' },
-  { id: 5, title: 'Network Troubleshooting Runbook', category: 'IT Setup', status: 'active', steps: 15, owner: 'Tech Team', updated: 'Mar 30', color: '#FF9500' },
-  { id: 6, title: 'Resilio Sync — New Node Setup', category: 'File Sync', status: 'review', steps: 7, owner: 'Tech Team', updated: 'Mar 25', color: '#00E5FF' },
-  { id: 7, title: 'Equipment Checkout & Return', category: 'Operations', status: 'draft', steps: 5, owner: 'Studio Team', updated: 'Mar 20', color: '#FF2D78' },
-  { id: 8, title: 'macOS Update Deployment via Jamf', category: 'IT Setup', status: 'active', steps: 11, owner: 'Tech Team', updated: 'Mar 18', color: '#BF5AF2' },
+  { id: 1, title: 'New Mac Enrollment — Jamf Pro', category: 'IT Setup', status: 'active', steps: 12, owner: 'Tech Team', updated: 'Apr 10', color: '#9888C8' },
+  { id: 2, title: 'Studio Startup Procedure', category: 'Operations', status: 'active', steps: 8, owner: 'Studio Team', updated: 'Apr 8', color: '#8FBF8A' },
+  { id: 3, title: 'Production Laydown — End of Day', category: 'Operations', status: 'active', steps: 6, owner: 'Studio Team', updated: 'Apr 5', color: '#E07060' },
+  { id: 4, title: 'Capture One Session Setup', category: 'Photo Ops', status: 'active', steps: 9, owner: 'Photo Team', updated: 'Apr 3', color: '#E8C070' },
+  { id: 5, title: 'Network Troubleshooting Runbook', category: 'IT Setup', status: 'active', steps: 15, owner: 'Tech Team', updated: 'Mar 30', color: '#E09040' },
+  { id: 6, title: 'Resilio Sync — New Node Setup', category: 'File Sync', status: 'review', steps: 7, owner: 'Tech Team', updated: 'Mar 25', color: '#F0A870' },
+  { id: 7, title: 'Equipment Checkout & Return', category: 'Operations', status: 'draft', steps: 5, owner: 'Studio Team', updated: 'Mar 20', color: '#D86040' },
+  { id: 8, title: 'macOS Update Deployment via Jamf', category: 'IT Setup', status: 'active', steps: 11, owner: 'Tech Team', updated: 'Mar 18', color: '#9888C8' },
 ];
 
 const statusConfig = {
-  active: { label: 'Active', color: '#00FF90', bg: 'rgba(0,255,144,0.1)', border: 'rgba(0,255,144,0.2)', icon: CheckCircle },
-  review: { label: 'In Review', color: '#FF9500', bg: 'rgba(255,149,0,0.1)', border: 'rgba(255,149,0,0.2)', icon: Clock },
+  active: { label: 'Active', color: '#8FBF8A', bg: 'rgba(143,191,138,0.1)', border: 'rgba(143,191,138,0.2)', icon: CheckCircle },
+  review: { label: 'In Review', color: '#E09040', bg: 'rgba(224,144,64,0.1)', border: 'rgba(224,144,64,0.2)', icon: Clock },
   draft: { label: 'Draft', color: '#4B5060', bg: 'rgba(255,255,255,0.05)', border: 'rgba(255,255,255,0.08)', icon: AlertCircle },
 };
 
 const categories = ['All', 'Operations', 'IT Setup', 'Photo Ops', 'File Sync'];
 
 export function SOPs() {
-  const glass = { background: 'rgba(10,12,22,0.55)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 'var(--radius)' };
+  const glass = { background: 'rgba(22,16,12,0.55)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 'var(--radius)' };
 
   return (
     <div>

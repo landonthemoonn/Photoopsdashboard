@@ -12,7 +12,7 @@ const mockEvents: CalendarEvent[] = [
   { id: '4', title: 'Studio Setup — Tomorrow', start: 'Tomorrow 8:00 AM', end: '9:00 AM', location: 'Main Stage', organizer: 'Alex Kim' },
 ];
 
-const eventColors = ['#FFD60A', '#00B4FF', '#BF5AF2', '#00FF90'];
+const eventColors = ['#E8C070', '#E07060', '#9888C8', '#8FBF8A'];
 
 export function OutlookCalendar() {
   const today = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
@@ -23,9 +23,9 @@ export function OutlookCalendar() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
       className="relative overflow-hidden col-span-2 cursor-default"
-      style={{ background: 'rgba(10,12,22,0.55)', backdropFilter: 'blur(24px) saturate(160%)', WebkitBackdropFilter: 'blur(24px) saturate(160%)', borderRadius: 'var(--radius)', border: '1px solid rgba(255,214,10,0.15)', padding: '1.5rem', boxShadow: '0 4px 30px rgba(0,0,0,0.4)' }}
+      style={{ background: 'rgba(22,16,12,0.6)', backdropFilter: 'blur(28px) saturate(140%)', WebkitBackdropFilter: 'blur(28px) saturate(140%)', borderRadius: 'var(--radius)', border: '1px solid rgba(232,192,112,0.15)', padding: '1.5rem', boxShadow: '0 4px 30px rgba(0,0,0,0.4)' }}
     >
-      <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,214,10,0.5), transparent)' }} />
+      <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(232,192,112,0.5), transparent)' }} />
 
       <div className="flex items-start justify-between mb-5">
         <div>

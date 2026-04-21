@@ -2,22 +2,22 @@ import { motion } from 'motion/react';
 import { Lightbulb, Tag, Plus } from 'lucide-react';
 
 const learnings = [
-  { id: 1, title: 'Capture One crashes when tethering via hub — use direct USB', category: 'Photo Ops', tags: ['Capture One', 'USB', 'Hardware'], date: 'Apr 18', author: 'LT', color: '#FFD60A', impact: 'high' },
-  { id: 2, title: 'Jamf policies fail silently if device is on VPN — disable VPN first', category: 'IT', tags: ['Jamf', 'VPN', 'Networking'], date: 'Apr 15', author: 'MR', color: '#BF5AF2', impact: 'high' },
-  { id: 3, title: 'Mac Studios run hot in the Edit Bay — open rack door during production', category: 'Hardware', tags: ['Mac Studio', 'Thermal'], date: 'Apr 12', author: 'SC', color: '#FF9500', impact: 'medium' },
-  { id: 4, title: 'Resilio Sync is faster with SMB disabled on macOS Sonoma', category: 'File Sync', tags: ['Resilio', 'Networking', 'Performance'], date: 'Apr 10', author: 'LT', color: '#00E5FF', impact: 'medium' },
-  { id: 5, title: 'Apple Remote Desktop needs re-auth after macOS update — schedule update windows', category: 'IT', tags: ['ARD', 'macOS Update'], date: 'Apr 8', author: 'MR', color: '#00B4FF', impact: 'medium' },
-  { id: 6, title: 'Capture One sessions should live on SSD not NAS for tethering latency', category: 'Photo Ops', tags: ['Capture One', 'Storage', 'Performance'], date: 'Apr 5', author: 'JL', color: '#00FF90', impact: 'low' },
+  { id: 1, title: 'Capture One crashes when tethering via hub — use direct USB', category: 'Photo Ops', tags: ['Capture One', 'USB', 'Hardware'], date: 'Apr 18', author: 'LT', color: '#E8C070', impact: 'high' },
+  { id: 2, title: 'Jamf policies fail silently if device is on VPN — disable VPN first', category: 'IT', tags: ['Jamf', 'VPN', 'Networking'], date: 'Apr 15', author: 'MR', color: '#9888C8', impact: 'high' },
+  { id: 3, title: 'Mac Studios run hot in the Edit Bay — open rack door during production', category: 'Hardware', tags: ['Mac Studio', 'Thermal'], date: 'Apr 12', author: 'SC', color: '#E09040', impact: 'medium' },
+  { id: 4, title: 'Resilio Sync is faster with SMB disabled on macOS Sonoma', category: 'File Sync', tags: ['Resilio', 'Networking', 'Performance'], date: 'Apr 10', author: 'LT', color: '#F0A870', impact: 'medium' },
+  { id: 5, title: 'Apple Remote Desktop needs re-auth after macOS update — schedule update windows', category: 'IT', tags: ['ARD', 'macOS Update'], date: 'Apr 8', author: 'MR', color: '#E07060', impact: 'medium' },
+  { id: 6, title: 'Capture One sessions should live on SSD not NAS for tethering latency', category: 'Photo Ops', tags: ['Capture One', 'Storage', 'Performance'], date: 'Apr 5', author: 'JL', color: '#8FBF8A', impact: 'low' },
 ];
 
 const impactConfig = {
-  high: { label: 'High Impact', color: '#FF2D78', bg: 'rgba(255,45,120,0.1)' },
-  medium: { label: 'Medium', color: '#FF9500', bg: 'rgba(255,149,0,0.1)' },
+  high: { label: 'High Impact', color: '#D86040', bg: 'rgba(216,96,64,0.1)' },
+  medium: { label: 'Medium', color: '#E09040', bg: 'rgba(224,144,64,0.1)' },
   low: { label: 'Low', color: '#4B5060', bg: 'rgba(255,255,255,0.05)' },
 };
 
 export function Learnings() {
-  const glass = { background: 'rgba(10,12,22,0.55)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 'var(--radius)' };
+  const glass = { background: 'rgba(22,16,12,0.55)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 'var(--radius)' };
 
   return (
     <div>
@@ -27,7 +27,7 @@ export function Learnings() {
           <h1 className="text-2xl font-medium" style={{ color: 'var(--foreground)', letterSpacing: '-0.025em' }}>Learnings</h1>
           <p className="text-sm mt-1" style={{ color: 'var(--muted-foreground)' }}>Hard-won knowledge from the floor.</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all" style={{ background: 'rgba(0,180,255,0.1)', border: '1px solid rgba(0,180,255,0.2)', color: 'var(--neon-blue)' }}>
+        <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all" style={{ background: 'rgba(224,112,96,0.1)', border: '1px solid rgba(224,112,96,0.2)', color: 'var(--neon-blue)' }}>
           <Plus size={15} /> Add Learning
         </button>
       </motion.div>

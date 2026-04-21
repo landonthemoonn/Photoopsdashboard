@@ -2,33 +2,33 @@ import { motion } from 'motion/react';
 import { MapPin, Wifi, Camera, Monitor, HardDrive, Users, Phone } from 'lucide-react';
 
 const spaces = [
-  { name: 'Main Stage', type: 'Shooting', capacity: '8 people', macs: 2, color: '#FFD60A', status: 'active' },
-  { name: 'Edit Bay 1', type: 'Editing', capacity: '3 people', macs: 2, color: '#00B4FF', status: 'active' },
-  { name: 'Edit Bay 2', type: 'Editing', capacity: '3 people', macs: 1, color: '#BF5AF2', status: 'active' },
-  { name: 'Tech Desk', type: 'IT / Tech', capacity: '2 people', macs: 1, color: '#00E5FF', status: 'active' },
-  { name: 'Storage', type: 'Equipment', capacity: '—', macs: 1, color: '#FF9500', status: 'staging' },
+  { name: 'Main Stage', type: 'Shooting', capacity: '8 people', macs: 2, color: '#E8C070', status: 'active' },
+  { name: 'Edit Bay 1', type: 'Editing', capacity: '3 people', macs: 2, color: '#E07060', status: 'active' },
+  { name: 'Edit Bay 2', type: 'Editing', capacity: '3 people', macs: 1, color: '#9888C8', status: 'active' },
+  { name: 'Tech Desk', type: 'IT / Tech', capacity: '2 people', macs: 1, color: '#F0A870', status: 'active' },
+  { name: 'Storage', type: 'Equipment', capacity: '—', macs: 1, color: '#E09040', status: 'staging' },
 ];
 
 const equipment = [
-  { name: 'Mac Studio M2 Ultra (×4)', category: 'Computers', icon: Monitor, color: '#00B4FF' },
-  { name: 'iMac Pro 27" (×1)', category: 'Computers', icon: Monitor, color: '#BF5AF2' },
-  { name: 'MacBook Pro M3 (×2)', category: 'Computers', icon: Monitor, color: '#00E5FF' },
-  { name: 'Mac mini M2 (×1)', category: 'Computers', icon: Monitor, color: '#FF9500' },
-  { name: 'NAS — Synology DS1821+', category: 'Storage', icon: HardDrive, color: '#FFD60A' },
-  { name: 'Wireless network — Ubiquiti', category: 'Network', icon: Wifi, color: '#00FF90' },
-  { name: 'Phase One IQ4 150MP', category: 'Cameras', icon: Camera, color: '#FF2D78' },
-  { name: 'Canon EOS R5 (×2)', category: 'Cameras', icon: Camera, color: '#FF9500' },
+  { name: 'Mac Studio M2 Ultra (×4)', category: 'Computers', icon: Monitor, color: '#E07060' },
+  { name: 'iMac Pro 27" (×1)', category: 'Computers', icon: Monitor, color: '#9888C8' },
+  { name: 'MacBook Pro M3 (×2)', category: 'Computers', icon: Monitor, color: '#F0A870' },
+  { name: 'Mac mini M2 (×1)', category: 'Computers', icon: Monitor, color: '#E09040' },
+  { name: 'NAS — Synology DS1821+', category: 'Storage', icon: HardDrive, color: '#E8C070' },
+  { name: 'Wireless network — Ubiquiti', category: 'Network', icon: Wifi, color: '#8FBF8A' },
+  { name: 'Phase One IQ4 150MP', category: 'Cameras', icon: Camera, color: '#D86040' },
+  { name: 'Canon EOS R5 (×2)', category: 'Cameras', icon: Camera, color: '#E09040' },
 ];
 
 const contacts = [
-  { name: 'Landon Strempel', role: 'Lead Tech / IT', email: 'lstrempel@gap.com', color: '#00B4FF' },
-  { name: 'Sarah Chen', role: 'Photo Director', email: 'schen@gap.com', color: '#FFD60A' },
-  { name: 'Mike Rodriguez', role: 'Studio Manager', email: 'mrodriguez@gap.com', color: '#BF5AF2' },
-  { name: 'Gap IT Helpdesk', role: 'IT Support', phone: '+1 (415) 555-0100', color: '#00FF90' },
+  { name: 'Landon Strempel', role: 'Lead Tech / IT', email: 'lstrempel@gap.com', color: '#E07060' },
+  { name: 'Sarah Chen', role: 'Photo Director', email: 'schen@gap.com', color: '#E8C070' },
+  { name: 'Mike Rodriguez', role: 'Studio Manager', email: 'mrodriguez@gap.com', color: '#9888C8' },
+  { name: 'Gap IT Helpdesk', role: 'IT Support', phone: '+1 (415) 555-0100', color: '#8FBF8A' },
 ];
 
 export function StudioInfo() {
-  const glass = { background: 'rgba(10,12,22,0.55)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 'var(--radius)' };
+  const glass = { background: 'rgba(22,16,12,0.55)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 'var(--radius)' };
 
   return (
     <div>
@@ -52,7 +52,7 @@ export function StudioInfo() {
                   <p className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>{space.name}</p>
                   <p className="text-[10px]" style={{ color: 'var(--muted-foreground)' }}>{space.type} · {space.capacity} · {space.macs} Mac{space.macs !== 1 ? 's' : ''}</p>
                 </div>
-                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full" style={space.status === 'active' ? { background: 'rgba(0,255,144,0.1)', color: '#00FF90', border: '1px solid rgba(0,255,144,0.2)' } : { background: 'rgba(255,149,0,0.1)', color: '#FF9500', border: '1px solid rgba(255,149,0,0.2)' }}>
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full" style={space.status === 'active' ? { background: 'rgba(143,191,138,0.1)', color: '#8FBF8A', border: '1px solid rgba(143,191,138,0.2)' } : { background: 'rgba(224,144,64,0.1)', color: '#E09040', border: '1px solid rgba(224,144,64,0.2)' }}>
                   {space.status === 'active' ? 'Active' : 'Staging'}
                 </span>
               </motion.div>

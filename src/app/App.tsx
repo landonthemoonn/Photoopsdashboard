@@ -14,12 +14,12 @@ import { Settings } from './pages/Settings';
 export default function App() {
   return (
     <div className="size-full flex relative overflow-hidden" style={{ background: 'var(--background)' }}>
-      {/* Vivid ambient blobs — glass cards blur over these */}
-      <div className="absolute pointer-events-none animate-float" style={{ top: '-10%', right: '-5%', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,180,255,0.12) 0%, transparent 65%)', animationDuration: '7s' }} />
-      <div className="absolute pointer-events-none animate-float" style={{ bottom: '-15%', left: '-8%', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,90,242,0.1) 0%, transparent 65%)', animationDuration: '9s', animationDelay: '2s' }} />
-      <div className="absolute pointer-events-none animate-float" style={{ top: '40%', left: '35%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,229,255,0.06) 0%, transparent 65%)', animationDuration: '11s', animationDelay: '4s' }} />
-      <div className="absolute pointer-events-none animate-float" style={{ top: '10%', left: '20%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,45,120,0.07) 0%, transparent 65%)', animationDuration: '13s', animationDelay: '1s' }} />
-      <div className="absolute pointer-events-none animate-float" style={{ bottom: '10%', right: '20%', width: 450, height: 450, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,255,144,0.06) 0%, transparent 65%)', animationDuration: '10s', animationDelay: '3s' }} />
+      {/* Warm analog orbs — soft, blurry, grainy */}
+      <div className="absolute pointer-events-none animate-float" style={{ top: '-15%', right: '-10%', width: 800, height: 800, borderRadius: '50%', background: 'radial-gradient(circle, rgba(216,96,64,0.18) 0%, rgba(224,112,96,0.08) 40%, transparent 70%)', animationDuration: '8s', filter: 'blur(8px)' }} />
+      <div className="absolute pointer-events-none animate-float" style={{ bottom: '-20%', left: '-10%', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(152,136,200,0.14) 0%, rgba(152,136,200,0.06) 45%, transparent 70%)', animationDuration: '10s', animationDelay: '2s', filter: 'blur(8px)' }} />
+      <div className="absolute pointer-events-none animate-float" style={{ top: '30%', left: '30%', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(224,144,64,0.1) 0%, transparent 65%)', animationDuration: '12s', animationDelay: '4s', filter: 'blur(6px)' }} />
+      <div className="absolute pointer-events-none animate-float" style={{ top: '5%', left: '25%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(240,168,112,0.09) 0%, transparent 65%)', animationDuration: '14s', animationDelay: '1s', filter: 'blur(6px)' }} />
+      <div className="absolute pointer-events-none animate-float" style={{ bottom: '5%', right: '15%', width: 550, height: 550, borderRadius: '50%', background: 'radial-gradient(circle, rgba(232,192,112,0.08) 0%, transparent 65%)', animationDuration: '11s', animationDelay: '3s', filter: 'blur(6px)' }} />
 
       <Sidebar />
 

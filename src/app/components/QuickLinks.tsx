@@ -2,12 +2,12 @@ import { ArrowUpRight } from 'lucide-react';
 import { motion } from 'motion/react';
 
 const links = [
-  { name: 'Gap KB', url: '#', description: 'Knowledge Base', color: '#FFD60A' },
-  { name: 'Jamf Pro', url: 'https://gapinc.jamfcloud.com', description: 'Device Management', color: '#00B4FF' },
-  { name: 'Apple Business Mgr', url: 'https://business.apple.com', description: 'ABM Portal', color: '#BF5AF2' },
-  { name: 'Capture One Docs', url: 'https://support.captureone.com', description: 'Documentation', color: '#00E5FF' },
-  { name: 'Gap IT Helpdesk', url: '#', description: 'Support Portal', color: '#FF2D78' },
-  { name: 'Resilio Sync', url: '#', description: 'File Sync', color: '#00FF90' },
+  { name: 'Gap KB', url: '#', description: 'Knowledge Base', color: '#E8C070' },
+  { name: 'Jamf Pro', url: 'https://gapinc.jamfcloud.com', description: 'Device Management', color: '#E07060' },
+  { name: 'Apple Business Mgr', url: 'https://business.apple.com', description: 'ABM Portal', color: '#9888C8' },
+  { name: 'Capture One Docs', url: 'https://support.captureone.com', description: 'Documentation', color: '#F0A870' },
+  { name: 'Gap IT Helpdesk', url: '#', description: 'Support Portal', color: '#D86040' },
+  { name: 'Resilio Sync', url: '#', description: 'File Sync', color: '#8FBF8A' },
 ];
 
 export function QuickLinks() {
@@ -17,9 +17,9 @@ export function QuickLinks() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
       className="relative overflow-hidden"
-      style={{ background: 'rgba(10,12,22,0.55)', backdropFilter: 'blur(24px) saturate(160%)', WebkitBackdropFilter: 'blur(24px) saturate(160%)', borderRadius: 'var(--radius)', border: '1px solid rgba(191,90,242,0.15)', padding: '1.5rem', boxShadow: '0 4px 30px rgba(0,0,0,0.4)' }}
+      style={{ background: 'rgba(22,16,12,0.6)', backdropFilter: 'blur(28px) saturate(140%)', WebkitBackdropFilter: 'blur(28px) saturate(140%)', borderRadius: 'var(--radius)', border: '1px solid rgba(152,136,200,0.15)', padding: '1.5rem', boxShadow: '0 4px 30px rgba(0,0,0,0.5)' }}
     >
-      <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(191,90,242,0.5), transparent)' }} />
+      <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(152,136,200,0.5), transparent)' }} />
 
       <p className="text-[10px] font-semibold tracking-[0.14em] uppercase mb-4" style={{ color: 'var(--muted-foreground)' }}>Quick Links</p>
 

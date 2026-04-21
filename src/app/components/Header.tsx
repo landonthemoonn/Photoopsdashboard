@@ -62,7 +62,7 @@ export function Header() {
             placeholder="Search..."
             className="pl-9 pr-4 py-2 w-56 text-sm focus:outline-none transition-all duration-300"
             style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 'var(--radius)', color: 'var(--foreground)' }}
-            onFocus={(e) => { e.target.style.boxShadow = '0 0 0 2px rgba(0,180,255,0.2), 0 0 16px rgba(0,180,255,0.08)'; e.target.style.borderColor = 'rgba(0,180,255,0.35)'; }}
+            onFocus={(e) => { e.target.style.boxShadow = '0 0 0 2px rgba(224,112,96,0.2), 0 0 16px rgba(224,112,96,0.08)'; e.target.style.borderColor = 'rgba(224,112,96,0.35)'; }}
             onBlur={(e) => { e.target.style.boxShadow = 'none'; e.target.style.borderColor = 'rgba(255,255,255,0.07)'; }}
           />
         </motion.div>

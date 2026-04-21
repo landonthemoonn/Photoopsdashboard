@@ -27,7 +27,7 @@ export function DeviceTable() {
     return true;
   });
 
-  const glass = { background: 'rgba(10,12,22,0.55)', backdropFilter: 'blur(24px) saturate(160%)', WebkitBackdropFilter: 'blur(24px) saturate(160%)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 'var(--radius)', boxShadow: '0 4px 30px rgba(0,0,0,0.4)' };
+  const glass = { background: 'rgba(22,16,12,0.6)', backdropFilter: 'blur(24px) saturate(160%)', WebkitBackdropFilter: 'blur(24px) saturate(160%)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 'var(--radius)', boxShadow: '0 4px 30px rgba(0,0,0,0.4)' };
 
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.35, ease: [0.16, 1, 0.3, 1] }} style={glass} className="overflow-hidden">
@@ -39,7 +39,7 @@ export function DeviceTable() {
         <div className="flex items-center gap-2">
           <div className="flex gap-1 p-1 rounded-lg" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.05)' }}>
             {(['all', 'online', 'needs-update'] as Filter[]).map(f => (
-              <button key={f} onClick={() => setActiveFilter(f)} className="px-3 py-1.5 rounded-md text-[10px] font-semibold capitalize transition-all duration-200" style={{ background: activeFilter === f ? 'rgba(0,180,255,0.12)' : 'transparent', color: activeFilter === f ? 'var(--neon-blue)' : 'var(--muted-foreground)', border: activeFilter === f ? '1px solid rgba(0,180,255,0.2)' : '1px solid transparent' }}>
+              <button key={f} onClick={() => setActiveFilter(f)} className="px-3 py-1.5 rounded-md text-[10px] font-semibold capitalize transition-all duration-200" style={{ background: activeFilter === f ? 'rgba(224,112,96,0.12)' : 'transparent', color: activeFilter === f ? 'var(--neon-blue)' : 'var(--muted-foreground)', border: activeFilter === f ? '1px solid rgba(224,112,96,0.2)' : '1px solid transparent' }}>
                 {f === 'needs-update' ? 'Needs Update' : f === 'all' ? 'All' : 'Online'}
               </button>
             ))}
@@ -61,7 +61,7 @@ export function DeviceTable() {
         <tbody>
           {filtered.map((device, index) => (
             <motion.tr key={device.name} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2, delay: index * 0.04 }} className="transition-colors duration-150" style={{ borderBottom: index < filtered.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'rgba(0,180,255,0.025)'}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'rgba(224,112,96,0.025)'}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}
             >
               <td className="py-3.5 px-4"><span className="text-xs font-medium font-mono" style={{ color: 'var(--foreground)' }}>{device.name}</span></td>
@@ -70,19 +70,19 @@ export function DeviceTable() {
               <td className="py-3.5 px-4"><span className="text-xs font-mono" style={{ color: 'var(--foreground)', opacity: device.ipAddress === '—' ? 0.25 : 0.75 }}>{device.ipAddress}</span></td>
               <td className="py-3.5 px-4"><span className="text-xs font-mono" style={{ color: 'var(--foreground)', opacity: 0.75 }}>{device.os}</span></td>
               <td className="py-3.5 px-4">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold" style={device.status === 'online' ? { background: 'rgba(0,255,144,0.08)', color: '#00FF90', border: '1px solid rgba(0,255,144,0.2)' } : { background: 'rgba(255,255,255,0.04)', color: 'var(--muted-foreground)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold" style={device.status === 'online' ? { background: 'rgba(143,191,138,0.08)', color: '#8FBF8A', border: '1px solid rgba(143,191,138,0.2)' } : { background: 'rgba(255,255,255,0.04)', color: 'var(--muted-foreground)', border: '1px solid rgba(255,255,255,0.07)' }}>
                   <Circle size={5} fill="currentColor" strokeWidth={0} className={device.status === 'online' ? 'animate-pulse' : ''} />
                   {device.status === 'online' ? 'Online' : 'Offline'}
                 </span>
               </td>
               <td className="py-3.5 px-4">
-                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-semibold" style={device.updateStatus === 'current' ? { background: 'rgba(0,180,255,0.08)', color: '#00B4FF', border: '1px solid rgba(0,180,255,0.2)' } : { background: 'rgba(255,149,0,0.08)', color: '#FF9500', border: '1px solid rgba(255,149,0,0.2)' }}>
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-semibold" style={device.updateStatus === 'current' ? { background: 'rgba(224,112,96,0.08)', color: '#E07060', border: '1px solid rgba(224,112,96,0.2)' } : { background: 'rgba(224,144,64,0.08)', color: '#E09040', border: '1px solid rgba(224,144,64,0.2)' }}>
                   {device.updateStatus === 'current' ? 'Current' : 'Update'}
                 </span>
               </td>
               <td className="py-3.5 px-4 text-right">
                 {device.status === 'online' ? (
-                  <motion.a href={`vnc://${device.ipAddress}`} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium" title="Apple Remote Desktop" style={{ background: 'rgba(0,180,255,0.08)', color: 'var(--neon-blue)', border: '1px solid rgba(0,180,255,0.2)' }} whileHover={{ background: 'rgba(0,180,255,0.15)', boxShadow: '0 0 16px rgba(0,180,255,0.2)' }} whileTap={{ scale: 0.96 }}>
+                  <motion.a href={`vnc://${device.ipAddress}`} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium" title="Apple Remote Desktop" style={{ background: 'rgba(224,112,96,0.08)', color: 'var(--neon-blue)', border: '1px solid rgba(224,112,96,0.2)' }} whileHover={{ background: 'rgba(224,112,96,0.15)', boxShadow: '0 0 16px rgba(224,112,96,0.2)' }} whileTap={{ scale: 0.96 }}>
                     <Monitor size={12} /> Connect
                   </motion.a>
                 ) : <span className="text-xs" style={{ color: 'var(--muted-foreground)', opacity: 0.3 }}>—</span>}
