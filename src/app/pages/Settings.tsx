@@ -17,12 +17,12 @@ const integrations: Integration[] = [
   {
     id: 'jamf',
     name: 'Jamf Pro',
-    description: 'MDM — same login you use at gapinc.jamfcloud.com',
+    description: 'MDM — device management, policies, and inventory',
     url: 'https://gapinc.jamfcloud.com',
     color: '#E07060',
     fields: [
-      { label: 'Username', key: 'username', placeholder: 'your Jamf login username' },
-      { label: 'Password', key: 'password', placeholder: 'your Jamf login password', secret: true },
+      { label: 'Client ID', key: 'clientId', placeholder: 'paste Client ID here' },
+      { label: 'Client Secret', key: 'clientSecret', placeholder: 'paste Client Secret here', secret: true },
     ],
   },
   {
@@ -181,12 +181,24 @@ function IntegrationCard({ integration, creds, onSave }: {
       {integration.fields.length > 0 && (
         <div className="px-5 pb-5 pt-0">
           {integration.id === 'jamf' && (
-            <div className="mb-3 px-3 py-2 rounded-lg flex items-start gap-2" style={{ background: 'rgba(232,192,112,0.06)', border: '1px solid rgba(232,192,112,0.15)' }}>
-              <span style={{ color: '#E8C070', fontSize: 12, marginTop: 1 }}>💡</span>
-              <p className="text-[10px] leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
-                Just use your regular Jamf Pro login — the same username and password you use to sign into{' '}
-                <span style={{ color: '#E07060' }}>gapinc.jamfcloud.com</span>. No API key needed.
-              </p>
+            <div className="mb-3 px-3 py-2.5 rounded-lg space-y-1.5" style={{ background: 'rgba(232,192,112,0.05)', border: '1px solid rgba(232,192,112,0.15)' }}>
+              <p className="text-[10px] font-semibold tracking-wide" style={{ color: '#E8C070' }}>How to get these credentials</p>
+              <ol className="space-y-1">
+                {[
+                  'Log into gapinc.jamfcloud.com',
+                  'Top-right corner → Settings (gear icon)',
+                  'System → API Roles and Clients',
+                  'Click "API Clients" tab → New',
+                  'Give it a name (e.g. "PhotoOps Dashboard")',
+                  'Enable "Read" permissions for Computers',
+                  'Click Save → copy the Client ID and Client Secret',
+                ].map((step, i) => (
+                  <li key={i} className="flex items-start gap-2 text-[10px] leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
+                    <span className="font-mono flex-shrink-0" style={{ color: '#E07060', minWidth: 14 }}>{i + 1}.</span>
+                    <span>{step}</span>
+                  </li>
+                ))}
+              </ol>
             </div>
           )}
           <div className="p-4 rounded-xl space-y-3" style={{ background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.04)' }}>
