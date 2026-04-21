@@ -21,14 +21,15 @@ const integrations: Integration[] = [
     url: 'https://gapinc.jamfcloud.com',
     color: '#E07060',
     fields: [
-      { label: 'Client ID', key: 'clientId', placeholder: 'paste Client ID here' },
-      { label: 'Client Secret', key: 'clientSecret', placeholder: 'paste Client Secret here', secret: true },
+      { label: 'Tenant ID', key: 'tenantId', placeholder: 'Gap Azure AD Tenant ID (same as Outlook)' },
+      { label: 'Client ID', key: 'clientId', placeholder: 'Azure AD App Client ID' },
+      { label: 'Client Secret', key: 'clientSecret', placeholder: 'Azure AD App Client Secret', secret: true },
     ],
   },
   {
     id: 'outlook',
     name: 'Microsoft Outlook',
-    description: 'Calendar sync for studio shoot schedules',
+    description: 'Calendar sync — same Azure AD app as Jamf',
     url: 'https://outlook.office.com',
     color: '#9888C8',
     fields: [
@@ -181,24 +182,27 @@ function IntegrationCard({ integration, creds, onSave }: {
       {integration.fields.length > 0 && (
         <div className="px-5 pb-5 pt-0">
           {integration.id === 'jamf' && (
-            <div className="mb-3 px-3 py-2.5 rounded-lg space-y-1.5" style={{ background: 'rgba(232,192,112,0.05)', border: '1px solid rgba(232,192,112,0.15)' }}>
-              <p className="text-[10px] font-semibold tracking-wide" style={{ color: '#E8C070' }}>How to get these credentials</p>
-              <ol className="space-y-1">
+            <div className="mb-3 rounded-lg overflow-hidden" style={{ border: '1px solid rgba(232,192,112,0.15)' }}>
+              <div className="px-3 py-2" style={{ background: 'rgba(232,192,112,0.07)', borderBottom: '1px solid rgba(232,192,112,0.1)' }}>
+                <p className="text-[10px] font-semibold tracking-wide" style={{ color: '#E8C070' }}>Using Azure AD / SSO (recommended for Gap Inc)</p>
+              </div>
+              <div className="px-3 py-2.5 space-y-1" style={{ background: 'rgba(232,192,112,0.03)' }}>
+                <p className="text-[10px] leading-relaxed mb-2" style={{ color: 'var(--muted-foreground)' }}>
+                  Since Gap uses Azure AD for Jamf SSO, you can use the <span style={{ color: '#E07060' }}>same Azure AD app</span> as Outlook. These fields will be shared once Outlook is configured.
+                </p>
                 {[
-                  'Log into gapinc.jamfcloud.com',
-                  'Top-right corner → Settings (gear icon)',
-                  'System → API Roles and Clients',
-                  'Click "API Clients" tab → New',
-                  'Give it a name (e.g. "PhotoOps Dashboard")',
-                  'Enable "Read" permissions for Computers',
-                  'Click Save → copy the Client ID and Client Secret',
+                  'Go to portal.azure.com → Azure Active Directory',
+                  'App registrations → find or create "PhotoOps Dashboard"',
+                  'Copy the Tenant ID and Client ID from the Overview tab',
+                  'Certificates & Secrets → New client secret → copy the value',
+                  'Under API permissions → add Jamf Pro scope if needed (ask Gap IT)',
                 ].map((step, i) => (
-                  <li key={i} className="flex items-start gap-2 text-[10px] leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
+                  <div key={i} className="flex items-start gap-2 text-[10px] leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
                     <span className="font-mono flex-shrink-0" style={{ color: '#E07060', minWidth: 14 }}>{i + 1}.</span>
                     <span>{step}</span>
-                  </li>
+                  </div>
                 ))}
-              </ol>
+              </div>
             </div>
           )}
           <div className="p-4 rounded-xl space-y-3" style={{ background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.04)' }}>
