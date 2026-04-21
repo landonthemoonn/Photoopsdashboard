@@ -17,13 +17,12 @@ const integrations: Integration[] = [
   {
     id: 'jamf',
     name: 'Jamf Pro',
-    description: 'MDM — Device management, policies, and inventory',
+    description: 'MDM — same login you use at gapinc.jamfcloud.com',
     url: 'https://gapinc.jamfcloud.com',
     color: '#E07060',
     fields: [
-      { label: 'Instance URL', key: 'url', placeholder: 'https://gapinc.jamfcloud.com', defaultValue: 'https://gapinc.jamfcloud.com', readOnly: true },
-      { label: 'Username', key: 'username', placeholder: 'your-jamf-username' },
-      { label: 'Password', key: 'password', placeholder: '••••••••', secret: true },
+      { label: 'Username', key: 'username', placeholder: 'your Jamf login username' },
+      { label: 'Password', key: 'password', placeholder: 'your Jamf login password', secret: true },
     ],
   },
   {
@@ -181,6 +180,15 @@ function IntegrationCard({ integration, creds, onSave }: {
 
       {integration.fields.length > 0 && (
         <div className="px-5 pb-5 pt-0">
+          {integration.id === 'jamf' && (
+            <div className="mb-3 px-3 py-2 rounded-lg flex items-start gap-2" style={{ background: 'rgba(232,192,112,0.06)', border: '1px solid rgba(232,192,112,0.15)' }}>
+              <span style={{ color: '#E8C070', fontSize: 12, marginTop: 1 }}>💡</span>
+              <p className="text-[10px] leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
+                Just use your regular Jamf Pro login — the same username and password you use to sign into{' '}
+                <span style={{ color: '#E07060' }}>gapinc.jamfcloud.com</span>. No API key needed.
+              </p>
+            </div>
+          )}
           <div className="p-4 rounded-xl space-y-3" style={{ background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.04)' }}>
             {integration.fields.map(field => (
               <div key={field.key} className="flex items-center gap-3">
