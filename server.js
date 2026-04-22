@@ -3,6 +3,7 @@ import { createReadStream, statSync, existsSync } from 'node:fs';
 import { join, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { request as httpsRequest } from 'node:https';
+import { networkInterfaces } from 'node:os';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const PORT = process.env.PORT || 3000;
@@ -74,7 +75,7 @@ createServer((req, res) => {
     res.end('Not found');
   }
 }).listen(PORT, '0.0.0.0', () => {
-  const ifaces = Object.values((await import('node:os')).networkInterfaces())
+  const ifaces = Object.values(networkInterfaces())
     .flat()
     .filter(i => i.family === 'IPv4' && !i.internal)
     .map(i => `  http://${i.address}:${PORT}`);
