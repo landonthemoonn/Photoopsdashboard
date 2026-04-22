@@ -21,9 +21,8 @@ const integrations: Integration[] = [
     url: 'https://gapinc.jamfcloud.com',
     color: '#E07060',
     fields: [
-      { label: 'Tenant ID', key: 'tenantId', placeholder: 'Gap Azure AD Tenant ID (same as Outlook)' },
-      { label: 'Client ID', key: 'clientId', placeholder: 'Azure AD App Client ID' },
-      { label: 'Client Secret', key: 'clientSecret', placeholder: 'Azure AD App Client Secret', secret: true },
+      { label: 'Client ID', key: 'clientId', placeholder: 'paste Client ID from Jamf' },
+      { label: 'Client Secret', key: 'clientSecret', placeholder: 'paste Client Secret from Jamf', secret: true },
     ],
   },
   {
@@ -182,27 +181,10 @@ function IntegrationCard({ integration, creds, onSave }: {
       {integration.fields.length > 0 && (
         <div className="px-5 pb-5 pt-0">
           {integration.id === 'jamf' && (
-            <div className="mb-3 rounded-lg overflow-hidden" style={{ border: '1px solid rgba(232,192,112,0.15)' }}>
-              <div className="px-3 py-2" style={{ background: 'rgba(232,192,112,0.07)', borderBottom: '1px solid rgba(232,192,112,0.1)' }}>
-                <p className="text-[10px] font-semibold tracking-wide" style={{ color: '#E8C070' }}>Using Azure AD / SSO (recommended for Gap Inc)</p>
-              </div>
-              <div className="px-3 py-2.5 space-y-1" style={{ background: 'rgba(232,192,112,0.03)' }}>
-                <p className="text-[10px] leading-relaxed mb-2" style={{ color: 'var(--muted-foreground)' }}>
-                  Since Gap uses Azure AD for Jamf SSO, you can use the <span style={{ color: '#E07060' }}>same Azure AD app</span> as Outlook. These fields will be shared once Outlook is configured.
-                </p>
-                {[
-                  'Go to portal.azure.com → Azure Active Directory',
-                  'App registrations → find or create "PhotoOps Dashboard"',
-                  'Copy the Tenant ID and Client ID from the Overview tab',
-                  'Certificates & Secrets → New client secret → copy the value',
-                  'Under API permissions → add Jamf Pro scope if needed (ask Gap IT)',
-                ].map((step, i) => (
-                  <div key={i} className="flex items-start gap-2 text-[10px] leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
-                    <span className="font-mono flex-shrink-0" style={{ color: '#E07060', minWidth: 14 }}>{i + 1}.</span>
-                    <span>{step}</span>
-                  </div>
-                ))}
-              </div>
+            <div className="mb-3 px-3 py-2.5 rounded-lg" style={{ background: 'rgba(232,192,112,0.05)', border: '1px solid rgba(232,192,112,0.15)' }}>
+              <p className="text-[10px] leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
+                Your coworker creates this in Jamf under <span style={{ color: '#E07060' }}>Settings → System → API Roles and Clients</span>. They'll send you a Client ID and Client Secret — just paste them here.
+              </p>
             </div>
           )}
           <div className="p-4 rounded-xl space-y-3" style={{ background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.04)' }}>
