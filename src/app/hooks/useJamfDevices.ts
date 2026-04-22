@@ -23,7 +23,7 @@ function getJamfCreds() {
 async function fetchJamfDevices(): Promise<Device[]> {
   const { clientId, clientSecret } = getJamfCreds();
 
-  const tokenRes = await fetch('https://gapinc.jamfcloud.com/api/oauth/token', {
+  const tokenRes = await fetch('/api/jamf/api/oauth/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({ grant_type: 'client_credentials', client_id: clientId, client_secret: clientSecret }),
@@ -32,7 +32,7 @@ async function fetchJamfDevices(): Promise<Device[]> {
   if (!tokenRes.ok) throw new Error('auth');
   const { access_token } = await tokenRes.json();
 
-  const res = await fetch('https://gapinc.jamfcloud.com/api/v1/computers-preview', {
+  const res = await fetch('/api/jamf/api/v1/computers-preview', {
     headers: { Authorization: `Bearer ${access_token}`, Accept: 'application/json' },
   });
 
