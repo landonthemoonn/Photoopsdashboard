@@ -48,7 +48,7 @@ function SetupWizard({ onClose }: WizardProps) {
   const [newMember, setNewMember] = useState({ name: '', role: '' });
   const [revealed, setRevealed] = useState(false);
   const [testing, setTesting] = useState(false);
-  const [testResult, setTestResult] = useState<'idle' | 'ok' | 'fail'>('idle');
+  const [testResult, setTestResult] = useState<'idle' | 'ok' | 'fail' | 'no-proxy'>('idle');
 
   const steps = ['Studio', 'Team', 'Jamf Pro', 'Done'];
 
@@ -71,8 +71,10 @@ function SetupWizard({ onClose }: WizardProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ clientId: creds.clientId, clientSecret: creds.clientSecret, jamfUrl: config.jamfUrl }),
       });
-      setTestResult(res.ok ? 'ok' : 'fail');
-    } catch { setTestResult('fail'); }
+      if (res.status === 404) { setTestResult('no-proxy'); }
+      else if (res.status === 401) { setTestResult('fail'); }
+      else { setTestResult(res.ok ? 'ok' : 'fail'); }
+    } catch { setTestResult('no-proxy'); }
     setTesting(false);
   };
 
@@ -185,8 +187,12 @@ function SetupWizard({ onClose }: WizardProps) {
                   </div>
                 </div>
                 <button onClick={testJamf} disabled={testing || !creds.clientId || !creds.clientSecret} className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all disabled:opacity-40"
-                  style={{ background: testResult === 'ok' ? 'rgba(143,191,138,0.1)' : testResult === 'fail' ? 'rgba(224,112,96,0.1)' : 'rgba(255,255,255,0.05)', color: testResult === 'ok' ? '#8FBF8A' : testResult === 'fail' ? '#E07060' : 'var(--muted-foreground)', border: `1px solid ${testResult === 'ok' ? 'rgba(143,191,138,0.2)' : testResult === 'fail' ? 'rgba(224,112,96,0.2)' : 'rgba(255,255,255,0.08)'}` }}>
-                  {testing ? <><RefreshCw size={12} className="animate-spin" /> Testing…</> : testResult === 'ok' ? <><CheckCircle size={12} /> Connected!</> : testResult === 'fail' ? <><WifiOff size={12} /> Failed — check credentials</> : <><Wifi size={12} /> Test Connection</>}
+                  style={{ background: testResult === 'ok' ? 'rgba(143,191,138,0.1)' : testResult === 'fail' ? 'rgba(224,112,96,0.1)' : testResult === 'no-proxy' ? 'rgba(232,192,112,0.08)' : 'rgba(255,255,255,0.05)', color: testResult === 'ok' ? '#8FBF8A' : testResult === 'fail' ? '#E07060' : testResult === 'no-proxy' ? '#E8C070' : 'var(--muted-foreground)', border: `1px solid ${testResult === 'ok' ? 'rgba(143,191,138,0.2)' : testResult === 'fail' ? 'rgba(224,112,96,0.2)' : testResult === 'no-proxy' ? 'rgba(232,192,112,0.2)' : 'rgba(255,255,255,0.08)'}` }}>
+                  {testing ? <><RefreshCw size={12} className="animate-spin" /> Testing…</>
+                    : testResult === 'ok' ? <><CheckCircle size={12} /> Connected!</>
+                    : testResult === 'fail' ? <><WifiOff size={12} /> Bad credentials — double-check</>
+                    : testResult === 'no-proxy' ? <><AlertCircle size={12} /> Saved — test works once deployed to Netlify</>
+                    : <><Wifi size={12} /> Test Connection</>}
                 </button>
               </motion.div>
             )}
