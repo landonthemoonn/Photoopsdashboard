@@ -82,6 +82,7 @@ function SetupWizard({ onClose }: WizardProps) {
     saveConfig(config);
     const all = (() => { try { return JSON.parse(localStorage.getItem(CREDS_KEY) ?? '{}'); } catch { return {}; } })();
     localStorage.setItem(CREDS_KEY, JSON.stringify({ ...all, jamf: creds }));
+    window.dispatchEvent(new Event('jamf-creds-updated'));
     onClose();
   };
 
@@ -355,6 +356,7 @@ export function Settings() {
     setCreds(prev => {
       const next = { ...prev, [id]: { ...prev[id], [key]: value } };
       localStorage.setItem(CREDS_KEY, JSON.stringify(next));
+      if (id === 'jamf') window.dispatchEvent(new Event('jamf-creds-updated'));
       return next;
     });
   };

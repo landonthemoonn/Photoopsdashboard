@@ -88,5 +88,11 @@ export function useJamfDevices() {
 
   useEffect(() => { load(); }, [load]);
 
+  // Re-run when credentials are saved from Settings (same tab)
+  useEffect(() => {
+    window.addEventListener('jamf-creds-updated', load);
+    return () => window.removeEventListener('jamf-creds-updated', load);
+  }, [load]);
+
   return { devices, fetchState, fetchError, lastSync, reload: load };
 }
