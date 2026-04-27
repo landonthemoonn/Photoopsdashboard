@@ -8,6 +8,7 @@ export interface JamfDevice {
   status: 'online' | 'offline';
   updateStatus: 'current' | 'needs-update';
   ipAddress: string;
+  serial: string;
   jamfId?: string;
 }
 
@@ -72,6 +73,7 @@ export function useJamfDevices() {
           status: minutesSince < 15 ? 'online' : 'offline',
           updateStatus: (c.operatingSystemVersion as string)?.startsWith(LATEST_OS) ? 'current' : 'needs-update',
           ipAddress: (c.ipAddress as string) ?? '—',
+          serial: (c.serialNumber as string) ?? '—',
           jamfId: c.id as string,
         };
       });
