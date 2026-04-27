@@ -12,6 +12,7 @@ export interface JamfDevice {
 }
 
 export type FetchState = 'idle' | 'loading' | 'success' | 'no-creds' | 'auth' | 'network' | 'error';
+export type FetchError = { status?: number; detail?: string } | null;
 
 function getCreds() {
   try {
@@ -32,6 +33,7 @@ const LATEST_OS = '15.';
 export function useJamfDevices() {
   const [devices, setDevices] = useState<JamfDevice[]>([]);
   const [fetchState, setFetchState] = useState<FetchState>('idle');
+  const [fetchError, setFetchError] = useState<FetchError>(null);
   const [lastSync, setLastSync] = useState('');
 
   const load = useCallback(async () => {
@@ -39,6 +41,7 @@ export function useJamfDevices() {
     if (!clientId || !clientSecret) { setFetchState('no-creds'); return; }
 
     setFetchState('loading');
+    setFetchError(null);
     try {
       const res = await fetch('/.netlify/functions/jamf', {
         method: 'POST',
@@ -46,8 +49,15 @@ export function useJamfDevices() {
         body: JSON.stringify({ clientId, clientSecret, jamfUrl }),
       });
 
-      if (res.status === 401) throw new Error('auth');
-      if (!res.ok) throw new Error('error');
+      if (res.status === 401) { setFetchState('auth'); return; }
+
+      if (!res.ok) {
+        let detail = '';
+        try { const body = await res.json(); detail = body.error ?? body.detail ?? ''; } catch { /* ignore */ }
+        setFetchError({ status: res.status, detail });
+        setFetchState('error');
+        return;
+      }
 
       const data = await res.json();
       const mapped: JamfDevice[] = (data.results ?? []).map((c: Record<string, unknown>) => {
@@ -71,13 +81,12 @@ export function useJamfDevices() {
       setLastSync(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
     } catch (e) {
       const err = e as Error;
-      if (err.message === 'auth') setFetchState('auth');
-      else if (err.message === 'Failed to fetch') setFetchState('network');
-      else setFetchState('error');
+      if (err.message === 'Failed to fetch') setFetchState('network');
+      else { setFetchError({ detail: err.message }); setFetchState('error'); }
     }
   }, []);
 
   useEffect(() => { load(); }, [load]);
 
-  return { devices, fetchState, lastSync, reload: load };
+  return { devices, fetchState, fetchError, lastSync, reload: load };
 }

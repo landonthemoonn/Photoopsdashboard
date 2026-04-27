@@ -7,7 +7,7 @@ import { HardDrive, Wifi, WifiOff, AlertCircle, Monitor } from 'lucide-react';
 import { useJamfDevices } from '../hooks/useJamfDevices';
 
 export function Dashboard() {
-  const { devices, fetchState, lastSync, reload } = useJamfDevices();
+  const { devices, fetchState, fetchError, lastSync, reload } = useJamfDevices();
 
   const loading = fetchState === 'idle' || fetchState === 'loading';
   const online = devices.filter(d => d.status === 'online').length;
@@ -38,7 +38,7 @@ export function Dashboard() {
         <OutlookCalendar />
       </div>
 
-      <DeviceTable devices={devices} fetchState={fetchState} lastSync={lastSync} reload={reload} />
+      <DeviceTable devices={devices} fetchState={fetchState} fetchError={fetchError} lastSync={lastSync} reload={reload} />
     </div>
   );
 }

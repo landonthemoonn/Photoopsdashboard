@@ -1,18 +1,19 @@
 import { Monitor, Circle, RefreshCw, WifiOff, Settings, Loader } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useState } from 'react';
-import type { JamfDevice, FetchState } from '../hooks/useJamfDevices';
+import type { JamfDevice, FetchState, FetchError } from '../hooks/useJamfDevices';
 
 type Filter = 'all' | 'online' | 'needs-update';
 
 interface Props {
   devices: JamfDevice[];
   fetchState: FetchState;
+  fetchError: FetchError;
   lastSync: string;
   reload: () => void;
 }
 
-export function DeviceTable({ devices, fetchState, lastSync, reload }: Props) {
+export function DeviceTable({ devices, fetchState, fetchError, lastSync, reload }: Props) {
   const [activeFilter, setActiveFilter] = useState<Filter>('all');
 
   const filtered = devices.filter(d => {
@@ -27,7 +28,7 @@ export function DeviceTable({ devices, fetchState, lastSync, reload }: Props) {
     'no-creds': { icon: <Settings size={20} style={{ color: '#E09040' }} />, title: 'No Jamf credentials', sub: 'Go to Settings → run the Setup Wizard to add your Client ID and Secret' },
     'network': { icon: <WifiOff size={20} style={{ color: '#E07060' }} />, title: 'Cannot reach Jamf', sub: 'Check your network connection' },
     'auth': { icon: <Settings size={20} style={{ color: '#E07060' }} />, title: 'Invalid credentials', sub: 'Check your Client ID and Secret in Settings' },
-    'error': { icon: <WifiOff size={20} style={{ color: '#E07060' }} />, title: 'Something went wrong', sub: 'Try refreshing or check Settings' },
+    'error': { icon: <WifiOff size={20} style={{ color: '#E07060' }} />, title: `Error${fetchError?.status ? ` (${fetchError.status})` : ''}`, sub: fetchError?.detail ? fetchError.detail : 'Try refreshing or check Settings' },
   };
 
   const stateMsg = stateMessages[fetchState];
