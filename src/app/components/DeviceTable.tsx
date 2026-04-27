@@ -1,85 +1,19 @@
 import { Monitor, Circle, RefreshCw, WifiOff, Settings, Loader } from 'lucide-react';
 import { motion } from 'motion/react';
-import { useState, useEffect, useCallback } from 'react';
-
-interface Device {
-  name: string; category: string; location: string; os: string;
-  status: 'online' | 'offline'; updateStatus: 'current' | 'needs-update' | 'pending';
-  ipAddress: string; jamfId?: string;
-}
+import { useState } from 'react';
+import type { JamfDevice, FetchState } from '../hooks/useJamfDevices';
 
 type Filter = 'all' | 'online' | 'needs-update';
-type FetchState = 'idle' | 'loading' | 'success' | 'no-creds' | 'cors' | 'auth' | 'network' | 'error';
 
-function getJamfCreds() {
-  try {
-    const all = JSON.parse(localStorage.getItem('photoops_credentials') ?? '{}');
-    return { clientId: all.jamf?.clientId ?? '', clientSecret: all.jamf?.clientSecret ?? '' };
-  } catch { return { clientId: '', clientSecret: '' }; }
+interface Props {
+  devices: JamfDevice[];
+  fetchState: FetchState;
+  lastSync: string;
+  reload: () => void;
 }
 
-async function fetchJamfDevices(): Promise<Device[]> {
-  const { clientId, clientSecret } = getJamfCreds();
-
-  const tokenRes = await fetch('https://gapinc.jamfcloud.com/api/oauth/token', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({ grant_type: 'client_credentials', client_id: clientId, client_secret: clientSecret }),
-  });
-
-  if (!tokenRes.ok) throw new Error('auth');
-  const { access_token } = await tokenRes.json();
-
-  const res = await fetch('https://gapinc.jamfcloud.com/api/v1/computers-preview', {
-    headers: { Authorization: `Bearer ${access_token}`, Accept: 'application/json' },
-  });
-
-  if (!res.ok) throw new Error('fetch');
-  const data = await res.json();
-
-  const LATEST_OS = '15.';
-
-  return (data.results ?? []).map((c: Record<string, string>) => {
-    const lastContact = c.lastContactTime ? new Date(c.lastContactTime) : null;
-    const minutesSince = lastContact ? (Date.now() - lastContact.getTime()) / 60000 : Infinity;
-    return {
-      name: c.name ?? 'Unknown',
-      category: c.model ?? c.modelIdentifier ?? '—',
-      location: c.site?.name && c.site.name !== 'None' ? c.site.name : '—',
-      os: c.operatingSystemVersion ? `macOS ${c.operatingSystemVersion}` : '—',
-      status: minutesSince < 15 ? 'online' : 'offline',
-      updateStatus: c.operatingSystemVersion?.startsWith(LATEST_OS) ? 'current' : 'needs-update',
-      ipAddress: c.ipAddress ?? '—',
-      jamfId: c.id,
-    } as Device;
-  });
-}
-
-export function DeviceTable() {
-  const [devices, setDevices] = useState<Device[]>([]);
-  const [fetchState, setFetchState] = useState<FetchState>('idle');
+export function DeviceTable({ devices, fetchState, lastSync, reload }: Props) {
   const [activeFilter, setActiveFilter] = useState<Filter>('all');
-  const [lastSync, setLastSync] = useState<string>('');
-
-  const load = useCallback(async () => {
-    const { clientId, clientSecret } = getJamfCreds();
-    if (!clientId || !clientSecret) { setFetchState('no-creds'); return; }
-
-    setFetchState('loading');
-    try {
-      const data = await fetchJamfDevices();
-      setDevices(data);
-      setFetchState('success');
-      setLastSync(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-    } catch (e) {
-      const err = e as Error;
-      if (err.message === 'auth') setFetchState('auth');
-      else if (err.message === 'Failed to fetch') setFetchState(navigator.onLine ? 'cors' : 'network');
-      else setFetchState('error');
-    }
-  }, []);
-
-  useEffect(() => { load(); }, [load]);
 
   const filtered = devices.filter(d => {
     if (activeFilter === 'online') return d.status === 'online';
@@ -90,8 +24,7 @@ export function DeviceTable() {
   const glass = { background: 'rgba(22,16,12,0.6)', backdropFilter: 'blur(24px) saturate(160%)', WebkitBackdropFilter: 'blur(24px) saturate(160%)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 'var(--radius)', boxShadow: '0 4px 30px rgba(0,0,0,0.4)' };
 
   const stateMessages: Partial<Record<FetchState, { icon: React.ReactNode; title: string; sub: string }>> = {
-    'no-creds': { icon: <Settings size={20} style={{ color: '#E09040' }} />, title: 'No Jamf credentials', sub: 'Go to Settings and add your Client ID and Secret' },
-    'cors': { icon: <WifiOff size={20} style={{ color: '#E07060' }} />, title: 'Not on Gap network', sub: 'Connect to the studio network to load device data' },
+    'no-creds': { icon: <Settings size={20} style={{ color: '#E09040' }} />, title: 'No Jamf credentials', sub: 'Go to Settings → run the Setup Wizard to add your Client ID and Secret' },
     'network': { icon: <WifiOff size={20} style={{ color: '#E07060' }} />, title: 'Cannot reach Jamf', sub: 'Check your network connection' },
     'auth': { icon: <Settings size={20} style={{ color: '#E07060' }} />, title: 'Invalid credentials', sub: 'Check your Client ID and Secret in Settings' },
     'error': { icon: <WifiOff size={20} style={{ color: '#E07060' }} />, title: 'Something went wrong', sub: 'Try refreshing or check Settings' },
@@ -112,13 +45,13 @@ export function DeviceTable() {
           {fetchState === 'success' && (
             <div className="flex gap-1 p-1 rounded-lg" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.05)' }}>
               {(['all', 'online', 'needs-update'] as Filter[]).map(f => (
-                <button key={f} onClick={() => setActiveFilter(f)} className="px-3 py-1.5 rounded-md text-[10px] font-semibold capitalize transition-all duration-200" style={{ background: activeFilter === f ? 'rgba(224,112,96,0.12)' : 'transparent', color: activeFilter === f ? 'var(--neon-blue)' : 'var(--muted-foreground)', border: activeFilter === f ? '1px solid rgba(224,112,96,0.2)' : '1px solid transparent' }}>
+                <button key={f} onClick={() => setActiveFilter(f)} className="px-3 py-1.5 rounded-md text-[10px] font-semibold capitalize transition-all duration-200" style={{ background: activeFilter === f ? 'rgba(224,112,96,0.12)' : 'transparent', color: activeFilter === f ? '#E07060' : 'var(--muted-foreground)', border: activeFilter === f ? '1px solid rgba(224,112,96,0.2)' : '1px solid transparent' }}>
                   {f === 'needs-update' ? 'Needs Update' : f === 'all' ? 'All' : 'Online'}
                 </button>
               ))}
             </div>
           )}
-          <button onClick={load} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', color: 'var(--muted-foreground)' }}>
+          <button onClick={reload} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', color: 'var(--muted-foreground)' }}>
             <RefreshCw size={13} className={fetchState === 'loading' ? 'animate-spin' : ''} />
           </button>
         </div>
@@ -150,7 +83,7 @@ export function DeviceTable() {
           </thead>
           <tbody>
             {filtered.map((device, index) => (
-              <motion.tr key={device.name} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2, delay: index * 0.04 }} className="transition-colors duration-150" style={{ borderBottom: index < filtered.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}
+              <motion.tr key={device.name + index} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2, delay: index * 0.04 }} className="transition-colors duration-150" style={{ borderBottom: index < filtered.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}
                 onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'rgba(224,112,96,0.025)'}
                 onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}
               >
@@ -172,7 +105,7 @@ export function DeviceTable() {
                 </td>
                 <td className="py-3.5 px-4 text-right">
                   {device.status === 'online' && device.ipAddress !== '—' ? (
-                    <motion.a href={`vnc://${device.ipAddress}`} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium" title="Apple Remote Desktop" style={{ background: 'rgba(224,112,96,0.08)', color: 'var(--neon-blue)', border: '1px solid rgba(224,112,96,0.2)' }} whileHover={{ background: 'rgba(224,112,96,0.15)', boxShadow: '0 0 16px rgba(224,112,96,0.2)' }} whileTap={{ scale: 0.96 }}>
+                    <motion.a href={`vnc://${device.ipAddress}`} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium" title="Apple Remote Desktop" style={{ background: 'rgba(224,112,96,0.08)', color: '#E07060', border: '1px solid rgba(224,112,96,0.2)' }} whileHover={{ background: 'rgba(224,112,96,0.15)', boxShadow: '0 0 16px rgba(224,112,96,0.2)' }} whileTap={{ scale: 0.96 }}>
                       <Monitor size={12} /> Connect
                     </motion.a>
                   ) : <span className="text-xs" style={{ color: 'var(--muted-foreground)', opacity: 0.3 }}>—</span>}
