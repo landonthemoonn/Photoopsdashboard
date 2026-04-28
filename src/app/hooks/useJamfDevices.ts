@@ -29,6 +29,25 @@ function getCreds() {
   }
 }
 
+async function syncCredsFromDb(): Promise<boolean> {
+  try {
+    const res = await fetch('/.netlify/functions/settings');
+    if (!res.ok) return false;
+    const { credentials, config } = await res.json();
+    let updated = false;
+    if (credentials?.jamf?.clientId) {
+      localStorage.setItem('photoops_credentials', JSON.stringify(credentials));
+      updated = true;
+    }
+    if (config?.studioName !== undefined) {
+      localStorage.setItem('photoops_studio_config', JSON.stringify(config));
+    }
+    return updated;
+  } catch {
+    return false;
+  }
+}
+
 const LATEST_OS = '15.';
 
 export function useJamfDevices() {
@@ -88,9 +107,14 @@ export function useJamfDevices() {
     }
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  // On mount: pull creds from DB, then load devices
+  useEffect(() => {
+    syncCredsFromDb().then(synced => {
+      if (synced) window.dispatchEvent(new Event('jamf-creds-updated'));
+    });
+    load();
+  }, [load]);
 
-  // Re-run when credentials are saved from Settings (same tab)
   useEffect(() => {
     window.addEventListener('jamf-creds-updated', load);
     return () => window.removeEventListener('jamf-creds-updated', load);

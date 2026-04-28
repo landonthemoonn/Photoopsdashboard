@@ -81,7 +81,14 @@ function SetupWizard({ onClose }: WizardProps) {
   const finish = () => {
     saveConfig(config);
     const all = (() => { try { return JSON.parse(localStorage.getItem(CREDS_KEY) ?? '{}'); } catch { return {}; } })();
-    localStorage.setItem(CREDS_KEY, JSON.stringify({ ...all, jamf: creds }));
+    const credentials = { ...all, jamf: creds };
+    localStorage.setItem(CREDS_KEY, JSON.stringify(credentials));
+    // Persist to DB so credentials survive across devices/browsers
+    fetch('/.netlify/functions/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ credentials, config }),
+    }).catch(() => { /* ignore if running locally without netlify dev */ });
     window.dispatchEvent(new Event('jamf-creds-updated'));
     onClose();
   };
