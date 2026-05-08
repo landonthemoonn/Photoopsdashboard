@@ -1,4 +1,4 @@
-const { neon } = require('@neondatabase/serverless');
+import { neon } from '@neondatabase/serverless';
 
 const cors = {
   'Access-Control-Allow-Origin': '*',
@@ -19,7 +19,7 @@ async function getDb() {
   return sql;
 }
 
-exports.handler = async function (event) {
+export const handler = async function (event) {
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers: cors, body: '' };
   }
