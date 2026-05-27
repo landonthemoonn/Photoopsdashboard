@@ -61,8 +61,8 @@ http.createServer(async (req, res) => {
   console.log(`${req.method} ${req.url}`);
   if (req.method === 'OPTIONS') { res.writeHead(204, cors); res.end(); return; }
 
-  // Jamf proxy
-  if (req.url === '/.netlify/functions/jamf' && req.method === 'POST') {
+  // Jamf proxy (support both old and new URL patterns)
+  if ((req.url === '/.netlify/functions/jamf' || req.url === '/api/jamf/devices') && req.method === 'POST') {
     try {
       const { clientId, clientSecret, jamfUrl } = await getBody(req);
       if (!clientId || !clientSecret) return json(res, 400, { error: 'no-creds' });
@@ -104,7 +104,7 @@ http.createServer(async (req, res) => {
   }
 
   // Settings (stored in local JSON file — no cloud needed)
-  if (req.url === '/.netlify/functions/settings') {
+  if (req.url === '/.netlify/functions/settings' || req.url === '/api/settings') {
     if (req.method === 'GET') return json(res, 200, loadSettings());
     if (req.method === 'POST') {
       try {
