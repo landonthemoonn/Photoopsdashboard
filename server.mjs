@@ -58,6 +58,7 @@ const json = (res, status, data) => {
 };
 
 http.createServer(async (req, res) => {
+  console.log(`${req.method} ${req.url}`);
   if (req.method === 'OPTIONS') { res.writeHead(204, cors); res.end(); return; }
 
   // Jamf proxy
