@@ -72,12 +72,29 @@ http.createServer(async (req, res) => {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({ grant_type: 'client_credentials', client_id: clientId, client_secret: clientSecret }).toString(),
       });
-      if (!tokenRes.ok) return json(res, 401, { error: 'auth' });
+      if (!tokenRes.ok) {
+        const errText = await tokenRes.text();
+        console.error(`[Jamf] Auth failed (${tokenRes.status}):`, errText);
+        return json(res, 401, { error: 'auth', detail: errText });
+      }
       const { access_token } = await tokenRes.json();
-      const devRes = await fetch(`${base}/api/v2/computers?page-size=200`, {
+      console.log(`[Jamf] Token acquired, fetching devices...`);
+
+      // Try v2 first, fall back to v1
+      let devRes = await fetch(`${base}/api/v2/computers?page-size=200`, {
         headers: { Authorization: `Bearer ${access_token}`, Accept: 'application/json' },
       });
-      if (!devRes.ok) return json(res, devRes.status, { error: 'fetch' });
+      if (devRes.status === 404) {
+        console.log(`[Jamf] v2 returned 404, trying v1...`);
+        devRes = await fetch(`${base}/api/v1/computers-preview?page-size=200`, {
+          headers: { Authorization: `Bearer ${access_token}`, Accept: 'application/json' },
+        });
+      }
+      if (!devRes.ok) {
+        const errText = await devRes.text();
+        console.error(`[Jamf] Device fetch failed (${devRes.status}):`, errText);
+        return json(res, devRes.status, { error: 'fetch', detail: errText });
+      }
       console.log(`[Jamf] Fetched devices successfully`);
       return json(res, 200, await devRes.json());
     } catch (e) {
