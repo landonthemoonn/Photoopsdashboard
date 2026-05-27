@@ -363,6 +363,12 @@ export function Settings() {
     setCreds(prev => {
       const next = { ...prev, [id]: { ...prev[id], [key]: value } };
       localStorage.setItem(CREDS_KEY, JSON.stringify(next));
+      // Persist to server so credentials survive browser restarts
+      fetch('/.netlify/functions/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credentials: next, config: loadConfig() }),
+      }).catch(() => {});
       if (id === 'jamf') window.dispatchEvent(new Event('jamf-creds-updated'));
       return next;
     });
