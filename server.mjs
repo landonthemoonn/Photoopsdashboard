@@ -74,7 +74,7 @@ http.createServer(async (req, res) => {
       });
       if (!tokenRes.ok) return json(res, 401, { error: 'auth' });
       const { access_token } = await tokenRes.json();
-      const devRes = await fetch(`${base}/api/v1/computers-preview?page-size=200`, {
+      const devRes = await fetch(`${base}/api/v2/computers?page-size=200`, {
         headers: { Authorization: `Bearer ${access_token}`, Accept: 'application/json' },
       });
       if (!devRes.ok) return json(res, devRes.status, { error: 'fetch' });

@@ -42,7 +42,7 @@ export const handler = async function (event) {
 
     const { access_token } = await tokenRes.json();
 
-    const res = await fetch(`${baseUrl}/api/v1/computers-preview?page-size=200`, {
+    const res = await fetch(`${baseUrl}/api/v2/computers?page-size=200`, {
       headers: { Authorization: `Bearer ${access_token}`, Accept: 'application/json' },
     });
 
