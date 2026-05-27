@@ -66,7 +66,7 @@ function SetupWizard({ onClose }: WizardProps) {
   const testJamf = async () => {
     setTesting(true); setTestResult('idle');
     try {
-      const res = await fetch('/.netlify/functions/jamf', {
+      const res = await fetch('/api/jamf/devices', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ clientId: creds.clientId, clientSecret: creds.clientSecret, jamfUrl: config.jamfUrl }),
@@ -84,11 +84,11 @@ function SetupWizard({ onClose }: WizardProps) {
     const credentials = { ...all, jamf: creds };
     localStorage.setItem(CREDS_KEY, JSON.stringify(credentials));
     // Persist to DB so credentials survive across devices/browsers
-    fetch('/.netlify/functions/settings', {
+    fetch('/api/settings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ credentials, config }),
-    }).catch(() => { /* ignore if running locally without netlify dev */ });
+    }).catch(() => { /* ignore if running locally without backend */ });
     window.dispatchEvent(new Event('jamf-creds-updated'));
     onClose();
   };
@@ -364,7 +364,7 @@ export function Settings() {
       const next = { ...prev, [id]: { ...prev[id], [key]: value } };
       localStorage.setItem(CREDS_KEY, JSON.stringify(next));
       // Persist to server so credentials survive browser restarts
-      fetch('/.netlify/functions/settings', {
+      fetch('/api/settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ credentials: next, config: loadConfig() }),

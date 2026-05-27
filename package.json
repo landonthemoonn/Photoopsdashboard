@@ -6,7 +6,10 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "start": "node server.mjs"
+    "start": "node server.mjs",
+    "docker:build": "npm run build && docker compose build",
+    "docker:up": "docker compose up",
+    "docker:start": "npm run build && docker compose up --build"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",

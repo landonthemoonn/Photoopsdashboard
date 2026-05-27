@@ -31,7 +31,7 @@ function getCreds() {
 
 async function syncCredsFromDb(): Promise<boolean> {
   try {
-    const res = await fetch('/.netlify/functions/settings');
+    const res = await fetch('/api/settings');
     if (!res.ok) return false;
     const { credentials, config } = await res.json();
     let updated = false;
@@ -63,7 +63,7 @@ export function useJamfDevices() {
     setFetchState('loading');
     setFetchError(null);
     try {
-      const res = await fetch('/.netlify/functions/jamf', {
+      const res = await fetch('/api/jamf/devices', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ clientId, clientSecret, jamfUrl }),
