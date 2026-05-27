@@ -1,139 +1,35 @@
-import { Calendar, Clock, MapPin } from 'lucide-react';
+import { CalendarDays, CalendarX } from 'lucide-react';
 import { motion } from 'motion/react';
 
-interface CalendarEvent {
-  id: string;
-  title: string;
-  start: string;
-  end: string;
-  location?: string;
-  organizer: string;
-}
-
-// Mock data - will be replaced with real Outlook API data via Supabase
-const mockEvents: CalendarEvent[] = [
-  {
-    id: '1',
-    title: 'Product Shoot - Spring Collection',
-    start: '9:00 AM',
-    end: '12:00 PM',
-    location: 'Main Stage',
-    organizer: 'Sarah Chen'
-  },
-  {
-    id: '2',
-    title: 'Equipment Maintenance',
-    start: '1:00 PM',
-    end: '2:30 PM',
-    location: 'Tech Desk',
-    organizer: 'Mike Rodriguez'
-  },
-  {
-    id: '3',
-    title: 'Creative Review Session',
-    start: '3:00 PM',
-    end: '4:30 PM',
-    location: 'Edit Bay 1',
-    organizer: 'Jamie Lee'
-  },
-  {
-    id: '4',
-    title: 'Studio Setup - Tomorrow',
-    start: 'Tomorrow 8:00 AM',
-    end: '9:00 AM',
-    location: 'Main Stage',
-    organizer: 'Alex Kim'
-  }
-];
-
-const eventColors = ['#FF6B35', '#4ECDC4', '#6C5CE7', '#FFD93D'];
-
 export function OutlookCalendar() {
-  const today = new Date().toLocaleDateString('en-US', {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric'
-  });
+  const today = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.2 }}
-      whileHover={{ y: -4 }}
-      className="bg-[var(--neutral-card)] rounded-[1.5rem] p-7 border border-[var(--border)] shadow-sm hover:shadow-lg transition-shadow duration-300 col-span-2 cursor-default"
+      transition={{ duration: 0.45, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+      className="relative overflow-hidden col-span-2 cursor-default"
+      style={{ background: 'rgba(22,16,12,0.6)', backdropFilter: 'blur(28px) saturate(140%)', WebkitBackdropFilter: 'blur(28px) saturate(140%)', borderRadius: 'var(--radius)', border: '1px solid rgba(232,192,112,0.15)', padding: '1.5rem', boxShadow: '0 4px 30px rgba(0,0,0,0.4)' }}
     >
-      <div className="flex items-start justify-between mb-6">
+      <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(232,192,112,0.5), transparent)' }} />
+
+      <div className="flex items-start justify-between mb-5">
         <div>
-          <h3 className="text-lg font-medium text-[var(--foreground)] mb-1">Studio Calendar</h3>
-          <p className="text-sm text-[var(--muted-foreground)]">
-            Synced from Outlook - {today}
-          </p>
+          <p className="text-[10px] font-semibold tracking-[0.14em] uppercase" style={{ color: 'var(--muted-foreground)' }}>Studio Calendar</p>
+          <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)', opacity: 0.6 }}>{today}</p>
         </div>
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)]">
-          <Calendar size={14} className="text-[var(--muted-foreground)]" strokeWidth={2} />
-          <span className="text-xs text-[var(--foreground)]">Today's Schedule</span>
+        <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', color: 'var(--muted-foreground)' }}>
+          <CalendarDays size={11} strokeWidth={2} style={{ color: '#E8C070', opacity: 0.7 }} />
+          <span>Today</span>
         </div>
       </div>
 
-      <div className="space-y-3">
-        {mockEvents.map((event, index) => {
-          const color = eventColors[index % eventColors.length];
-          return (
-            <motion.div
-              key={event.id}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
-              whileHover={{
-                scale: 1.02,
-                x: 4,
-                boxShadow: `0 0 20px ${color}30, 0 4px 15px rgba(0,0,0,0.1)`
-              }}
-              className="p-4 rounded-[1.125rem] bg-[var(--background)] border border-[var(--border)] transition-all duration-300 group relative overflow-hidden"
-            >
-              {/* Color accent bar */}
-              <div
-                className="absolute left-0 top-0 bottom-0 w-1.5 transition-all duration-300"
-                style={{ backgroundColor: color }}
-              />
-
-              <div className="flex items-start justify-between pl-3">
-                <div className="flex-1">
-                  <div className="font-medium text-sm text-[var(--foreground)] mb-2">
-                    {event.title}
-                  </div>
-                  <div className="flex items-center gap-4 text-xs text-[var(--muted-foreground)]">
-                    <motion.div
-                      className="flex items-center gap-1.5"
-                      whileHover={{ scale: 1.05 }}
-                    >
-                      <Clock size={12} strokeWidth={2} style={{ color }} />
-                      <span>{event.start} - {event.end}</span>
-                    </motion.div>
-                    {event.location && (
-                      <motion.div
-                        className="flex items-center gap-1.5"
-                        whileHover={{ scale: 1.05 }}
-                      >
-                        <MapPin size={12} strokeWidth={2} style={{ color }} />
-                        <span>{event.location}</span>
-                      </motion.div>
-                    )}
-                  </div>
-                </div>
-                <div className="text-xs text-[var(--muted-foreground)] ml-4">
-                  {event.organizer}
-                </div>
-              </div>
-            </motion.div>
-          );
-        })}
-      </div>
-
-      <div className="mt-4 p-3 rounded-[0.875rem] bg-[var(--background)] border border-[var(--border)] text-center">
-        <p className="text-xs text-[var(--muted-foreground)]">
-          📅 Connect to Microsoft Graph API via Supabase for live calendar sync
+      <div className="flex flex-col items-center justify-center py-10 gap-3">
+        <CalendarX size={28} style={{ color: 'var(--muted-foreground)', opacity: 0.3 }} />
+        <p className="text-sm font-medium" style={{ color: 'var(--foreground)', opacity: 0.5 }}>Calendar not connected</p>
+        <p className="text-xs text-center max-w-xs" style={{ color: 'var(--muted-foreground)', opacity: 0.4 }}>
+          Microsoft Outlook integration coming soon. Configure credentials in Settings when ready.
         </p>
       </div>
     </motion.div>

@@ -1,77 +1,51 @@
-import { ExternalLink } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { motion } from 'motion/react';
 
 const links = [
-  { name: 'Gap KB', url: '#', description: 'Knowledge Base', color: '#6C5CE7' },
-  { name: 'Jamf Pro', url: '#', description: 'Device Management', color: '#FF6B35' },
-  { name: 'Apple Business Manager', url: '#', description: 'ABM Portal', color: '#4ECDC4' },
-  { name: 'Capture One Docs', url: '#', description: 'Documentation', color: '#FFD93D' },
-  { name: 'Gap IT Helpdesk', url: '#', description: 'Support Portal', color: '#FF8E9E' },
-  { name: 'Resilio Sync', url: '#', description: 'File Sync', color: '#A29BFE' }
+  { name: 'Gap KB', url: '#', description: 'Knowledge Base', color: '#E8C070' },
+  { name: 'Jamf Pro', url: 'https://gapinc.jamfcloud.com', description: 'Device Management', color: '#E07060' },
+  { name: 'Apple Business Mgr', url: 'https://business.apple.com', description: 'ABM Portal', color: '#9888C8' },
+  { name: 'Capture One Docs', url: 'https://support.captureone.com', description: 'Documentation', color: '#F0A870' },
+  { name: 'Gap IT Helpdesk', url: '#', description: 'Support Portal', color: '#D86040' },
+  { name: 'Resilio Sync', url: '#', description: 'File Sync', color: '#8FBF8A' },
 ];
 
 export function QuickLinks() {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.25 }}
-      whileHover={{ y: -4 }}
-      className="bg-[var(--neutral-card)] rounded-[1.5rem] p-7 border border-[var(--border)] shadow-sm hover:shadow-lg transition-shadow duration-300 cursor-default"
+      transition={{ duration: 0.45, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+      className="relative overflow-hidden"
+      style={{ background: 'rgba(22,16,12,0.6)', backdropFilter: 'blur(28px) saturate(140%)', WebkitBackdropFilter: 'blur(28px) saturate(140%)', borderRadius: 'var(--radius)', border: '1px solid rgba(152,136,200,0.15)', padding: '1.5rem', boxShadow: '0 4px 30px rgba(0,0,0,0.5)' }}
     >
-      <h3 className="text-lg font-medium mb-5 text-[var(--foreground)]">Quick Links</h3>
+      <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(152,136,200,0.5), transparent)' }} />
 
-      <div className="grid grid-cols-2 gap-3">
+      <p className="text-[10px] font-semibold tracking-[0.14em] uppercase mb-4" style={{ color: 'var(--muted-foreground)' }}>Quick Links</p>
+
+      <div className="grid grid-cols-2 gap-2">
         {links.map((link, index) => (
           <motion.a
             key={link.name}
             href={link.url}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4, delay: index * 0.05 }}
-            whileHover={{
-              scale: 1.03,
-              boxShadow: `0 0 20px ${link.color}40, 0 4px 15px rgba(0,0,0,0.1)`
-            }}
+            target={link.url.startsWith('http') ? '_blank' : undefined}
+            rel="noreferrer"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.25, delay: index * 0.04 }}
+            whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="group flex items-center justify-between p-4 rounded-[0.875rem] bg-[var(--background)] border border-[var(--border)] transition-all duration-300 relative overflow-hidden"
-            style={{
-              borderColor: 'var(--border)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = link.color;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'var(--border)';
-            }}
+            className="group relative flex items-center justify-between p-3 rounded-xl overflow-hidden transition-all duration-200"
+            style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = `${link.color}35`; (e.currentTarget as HTMLElement).style.background = `${link.color}08`; (e.currentTarget as HTMLElement).style.boxShadow = `0 0 16px ${link.color}12`; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.05)'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.03)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none'; }}
           >
-            {/* Color accent bar */}
-            <div
-              className="absolute left-0 top-0 bottom-0 w-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              style={{ backgroundColor: link.color }}
-            />
-
-            <div className="relative z-10">
-              <div className="font-medium text-sm text-[var(--foreground)] mb-0.5">
-                {link.name}
-              </div>
-              <div className="text-xs text-[var(--muted-foreground)]">
-                {link.description}
-              </div>
+            <div className="w-1.5 h-1.5 rounded-full flex-shrink-0 mr-2" style={{ background: link.color, boxShadow: `0 0 6px ${link.color}80` }} />
+            <div className="flex-1 min-w-0">
+              <div className="font-medium text-xs truncate" style={{ color: 'var(--foreground)' }}>{link.name}</div>
+              <div className="text-[10px] truncate mt-0.5" style={{ color: 'var(--muted-foreground)' }}>{link.description}</div>
             </div>
-            <motion.div
-              whileHover={{ x: 3, rotate: 45 }}
-              transition={{ duration: 0.2 }}
-            >
-              <ExternalLink
-                size={16}
-                className="text-[var(--muted-foreground)] group-hover:text-[var(--foreground)] transition-colors"
-                strokeWidth={2}
-                style={{
-                  color: link.color
-                }}
-              />
-            </motion.div>
+            <ArrowUpRight size={12} strokeWidth={2} className="flex-shrink-0 ml-1.5 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: link.color }} />
           </motion.a>
         ))}
       </div>

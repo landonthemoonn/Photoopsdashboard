@@ -1,265 +1,128 @@
-import { Monitor, Circle } from 'lucide-react';
+import { Monitor, Circle, RefreshCw, WifiOff, Settings, Loader } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useState } from 'react';
+import type { JamfDevice, FetchState, FetchError } from '../hooks/useJamfDevices';
 
-interface Device {
-  name: string;
-  category: string;
-  location: string;
-  os: string;
-  status: 'online' | 'offline';
-  updateStatus: 'current' | 'needs-update' | 'pending';
-  ipAddress: string;
-  jamfId?: string;
+type Filter = 'all' | 'online' | 'needs-update';
+
+interface Props {
+  devices: JamfDevice[];
+  fetchState: FetchState;
+  fetchError: FetchError;
+  lastSync: string;
+  reload: () => void;
 }
 
-// Mock data - will be replaced with real Jamf Pro API data via Supabase
-const devices: Device[] = [
-  {
-    name: 'Photo-Mac-01',
-    category: 'iMac Pro',
-    location: 'Main Stage',
-    os: 'macOS 14.3',
-    status: 'online',
-    updateStatus: 'current',
-    ipAddress: '10.0.1.101',
-    jamfId: 'JMF-001'
-  },
-  {
-    name: 'Photo-Mac-02',
-    category: 'Mac Studio',
-    location: 'Main Stage',
-    os: 'macOS 14.2',
-    status: 'online',
-    updateStatus: 'needs-update',
-    ipAddress: '10.0.1.102',
-    jamfId: 'JMF-002'
-  },
-  {
-    name: 'Tech-Mac-01',
-    category: 'MacBook Pro',
-    location: 'Tech Desk',
-    os: 'macOS 14.3',
-    status: 'offline',
-    updateStatus: 'current',
-    ipAddress: '—',
-    jamfId: 'JMF-003'
-  },
-  {
-    name: 'Photo-Mac-03',
-    category: 'iMac',
-    location: 'Edit Bay 1',
-    os: 'macOS 14.1',
-    status: 'online',
-    updateStatus: 'needs-update',
-    ipAddress: '10.0.1.103',
-    jamfId: 'JMF-004'
-  },
-  {
-    name: 'Photo-Mac-04',
-    category: 'Mac Studio',
-    location: 'Edit Bay 2',
-    os: 'macOS 14.3',
-    status: 'online',
-    updateStatus: 'current',
-    ipAddress: '10.0.1.104',
-    jamfId: 'JMF-005'
-  },
-  {
-    name: 'Photo-Mac-05',
-    category: 'Mac Studio',
-    location: 'Edit Bay 1',
-    os: 'macOS 14.3',
-    status: 'online',
-    updateStatus: 'current',
-    ipAddress: '10.0.1.105',
-    jamfId: 'JMF-006'
-  }
-];
+export function DeviceTable({ devices, fetchState, fetchError, lastSync, reload }: Props) {
+  const [activeFilter, setActiveFilter] = useState<Filter>('all');
 
-export function DeviceTable() {
+  const filtered = devices.filter(d => {
+    if (activeFilter === 'online') return d.status === 'online';
+    if (activeFilter === 'needs-update') return d.updateStatus === 'needs-update';
+    return true;
+  });
+
+  const glass = { background: 'rgba(22,16,12,0.6)', backdropFilter: 'blur(24px) saturate(160%)', WebkitBackdropFilter: 'blur(24px) saturate(160%)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 'var(--radius)', boxShadow: '0 4px 30px rgba(0,0,0,0.4)' };
+
+  const stateMessages: Partial<Record<FetchState, { icon: React.ReactNode; title: string; sub: string }>> = {
+    'no-creds': { icon: <Settings size={20} style={{ color: '#E09040' }} />, title: 'No Jamf credentials', sub: 'Go to Settings → run the Setup Wizard to add your Client ID and Secret' },
+    'network': { icon: <WifiOff size={20} style={{ color: '#E07060' }} />, title: 'Cannot reach Jamf', sub: 'Check your network connection' },
+    'auth': { icon: <Settings size={20} style={{ color: '#E07060' }} />, title: 'Invalid credentials', sub: 'Check your Client ID and Secret in Settings' },
+    'error': { icon: <WifiOff size={20} style={{ color: '#E07060' }} />, title: `Error${fetchError?.status ? ` (${fetchError.status})` : ''}`, sub: fetchError?.detail ? fetchError.detail : 'Try refreshing or check Settings' },
+  };
+
+  const stateMsg = stateMessages[fetchState];
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.4 }}
-      className="bg-[var(--neutral-card)] rounded-[1.5rem] p-7 border border-[var(--border)] shadow-sm"
-    >
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-medium text-[var(--foreground)]">Device Inventory</h3>
-
-        <div className="flex gap-2">
-          <motion.button
-            className="px-4 py-2 rounded-[0.75rem] bg-[var(--charcoal-accent)] text-white text-sm transition-all duration-300"
-            whileHover={{
-              scale: 1.05,
-              boxShadow: '0 0 20px var(--charcoal-glow)'
-            }}
-            whileTap={{ scale: 0.95 }}
-          >
-            All Devices
-          </motion.button>
-          <motion.button
-            className="px-4 py-2 rounded-[0.75rem] bg-[var(--background)] text-[var(--foreground)] text-sm border border-[var(--border)] transition-all duration-300"
-            whileHover={{
-              scale: 1.05,
-              borderColor: 'var(--green-accent)',
-              boxShadow: '0 0 15px var(--green-glow)'
-            }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Online Only
-          </motion.button>
-          <motion.button
-            className="px-4 py-2 rounded-[0.75rem] bg-[var(--background)] text-[var(--foreground)] text-sm border border-[var(--border)] transition-all duration-300"
-            whileHover={{
-              scale: 1.05,
-              borderColor: 'var(--orange-accent)',
-              boxShadow: '0 0 15px var(--orange-glow)'
-            }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Needs Update
-          </motion.button>
+    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.35, ease: [0.16, 1, 0.3, 1] }} style={glass} className="overflow-hidden">
+      <div className="flex items-center justify-between p-5" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+        <div>
+          <p className="text-[10px] font-semibold tracking-[0.14em] uppercase" style={{ color: 'var(--muted-foreground)' }}>Device Inventory</p>
+          <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)', opacity: 0.5 }}>
+            {fetchState === 'success' ? `${filtered.length} of ${devices.length} devices · synced ${lastSync}` : 'gapinc.jamfcloud.com'}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          {fetchState === 'success' && (
+            <div className="flex gap-1 p-1 rounded-lg" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.05)' }}>
+              {(['all', 'online', 'needs-update'] as Filter[]).map(f => (
+                <button key={f} onClick={() => setActiveFilter(f)} className="px-3 py-1.5 rounded-md text-[10px] font-semibold capitalize transition-all duration-200" style={{ background: activeFilter === f ? 'rgba(224,112,96,0.12)' : 'transparent', color: activeFilter === f ? '#E07060' : 'var(--muted-foreground)', border: activeFilter === f ? '1px solid rgba(224,112,96,0.2)' : '1px solid transparent' }}>
+                  {f === 'needs-update' ? 'Needs Update' : f === 'all' ? 'All' : 'Online'}
+                </button>
+              ))}
+            </div>
+          )}
+          <button onClick={reload} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', color: 'var(--muted-foreground)' }}>
+            <RefreshCw size={13} className={fetchState === 'loading' ? 'animate-spin' : ''} />
+          </button>
         </div>
       </div>
 
-      <div className="overflow-hidden">
+      {fetchState === 'loading' && (
+        <div className="flex flex-col items-center justify-center py-16 gap-3">
+          <Loader size={20} className="animate-spin" style={{ color: '#E07060' }} />
+          <p className="text-xs" style={{ color: 'var(--muted-foreground)' }}>Connecting to Jamf Pro…</p>
+        </div>
+      )}
+
+      {stateMsg && (
+        <div className="flex flex-col items-center justify-center py-16 gap-2">
+          {stateMsg.icon}
+          <p className="text-sm font-medium mt-1" style={{ color: 'var(--foreground)' }}>{stateMsg.title}</p>
+          <p className="text-xs" style={{ color: 'var(--muted-foreground)' }}>{stateMsg.sub}</p>
+        </div>
+      )}
+
+      {fetchState === 'success' && (
         <table className="w-full">
           <thead>
-            <tr className="border-b border-[var(--border)]">
-              <th className="text-left py-3 px-4 text-xs font-medium text-[var(--muted-foreground)] uppercase tracking-wide">
-                Device Name
-              </th>
-              <th className="text-left py-3 px-4 text-xs font-medium text-[var(--muted-foreground)] uppercase tracking-wide">
-                Category
-              </th>
-              <th className="text-left py-3 px-4 text-xs font-medium text-[var(--muted-foreground)] uppercase tracking-wide">
-                Location
-              </th>
-              <th className="text-left py-3 px-4 text-xs font-medium text-[var(--muted-foreground)] uppercase tracking-wide">
-                IP Address
-              </th>
-              <th className="text-left py-3 px-4 text-xs font-medium text-[var(--muted-foreground)] uppercase tracking-wide">
-                OS Version
-              </th>
-              <th className="text-left py-3 px-4 text-xs font-medium text-[var(--muted-foreground)] uppercase tracking-wide">
-                Status
-              </th>
-              <th className="text-left py-3 px-4 text-xs font-medium text-[var(--muted-foreground)] uppercase tracking-wide">
-                Updates
-              </th>
-              <th className="text-right py-3 px-4 text-xs font-medium text-[var(--muted-foreground)] uppercase tracking-wide">
-                ARD
-              </th>
+            <tr style={{ background: 'rgba(255,255,255,0.02)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+              {['Device', 'Category', 'Location', 'IP Address', 'OS Version', 'Status', 'Updates', 'ARD'].map((col, i) => (
+                <th key={col} className={`py-3 px-4 text-[10px] font-semibold tracking-[0.1em] uppercase ${i === 7 ? 'text-right' : 'text-left'}`} style={{ color: 'var(--muted-foreground)' }}>{col}</th>
+              ))}
             </tr>
           </thead>
           <tbody>
-            {devices.map((device, index) => (
-              <motion.tr
-                key={device.name}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.05 }}
-                whileHover={{
-                  backgroundColor: 'var(--background)',
-                  boxShadow: device.status === 'online'
-                    ? '0 0 15px var(--green-glow)'
-                    : '0 0 10px rgba(0,0,0,0.05)'
-                }}
-                className="border-b border-[var(--border)] last:border-0 transition-all duration-300"
+            {filtered.map((device, index) => (
+              <motion.tr key={device.name + index} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2, delay: index * 0.04 }} className="transition-colors duration-150" style={{ borderBottom: index < filtered.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'rgba(224,112,96,0.025)'}
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}
               >
-                <td className="py-4 px-4">
-                  <span className="font-medium text-sm text-[var(--foreground)]">
-                    {device.name}
-                  </span>
-                </td>
-                <td className="py-4 px-4">
-                  <span className="text-sm text-[var(--foreground)]">{device.category}</span>
-                </td>
-                <td className="py-4 px-4">
-                  <span className="text-sm text-[var(--foreground)]">{device.location}</span>
-                </td>
-                <td className="py-4 px-4">
-                  <span className="text-sm font-mono text-[var(--foreground)]">{device.ipAddress}</span>
-                </td>
-                <td className="py-4 px-4">
-                  <span className="text-sm text-[var(--foreground)]">{device.os}</span>
-                </td>
-                <td className="py-4 px-4">
-                  <span
-                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium relative ${
-                      device.status === 'online'
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-gray-100 text-gray-600'
-                    }`}
-                    style={
-                      device.status === 'online'
-                        ? {
-                            boxShadow: '0 0 15px rgba(78, 205, 196, 0.4)',
-                            animation: 'glow 2s ease-in-out infinite'
-                          }
-                        : undefined
-                    }
-                  >
-                    <Circle
-                      size={6}
-                      fill="currentColor"
-                      strokeWidth={0}
-                      className={device.status === 'online' ? 'animate-pulse' : ''}
-                    />
+                <td className="py-3.5 px-4"><span className="text-xs font-medium font-mono" style={{ color: 'var(--foreground)' }}>{device.name}</span></td>
+                <td className="py-3.5 px-4"><span className="text-xs" style={{ color: 'var(--muted-foreground)' }}>{device.category}</span></td>
+                <td className="py-3.5 px-4"><span className="text-xs" style={{ color: 'var(--muted-foreground)' }}>{device.location}</span></td>
+                <td className="py-3.5 px-4"><span className="text-xs font-mono" style={{ color: 'var(--foreground)', opacity: device.ipAddress === '—' ? 0.25 : 0.75 }}>{device.ipAddress}</span></td>
+                <td className="py-3.5 px-4"><span className="text-xs font-mono" style={{ color: 'var(--foreground)', opacity: 0.75 }}>{device.os}</span></td>
+                <td className="py-3.5 px-4">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold" style={device.status === 'online' ? { background: 'rgba(143,191,138,0.08)', color: '#8FBF8A', border: '1px solid rgba(143,191,138,0.2)' } : { background: 'rgba(255,255,255,0.04)', color: 'var(--muted-foreground)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                    <Circle size={5} fill="currentColor" strokeWidth={0} className={device.status === 'online' ? 'animate-pulse' : ''} />
                     {device.status === 'online' ? 'Online' : 'Offline'}
                   </span>
                 </td>
-                <td className="py-4 px-4">
-                  <span
-                    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                      device.updateStatus === 'current'
-                        ? 'bg-blue-100 text-blue-800'
-                        : device.updateStatus === 'needs-update'
-                        ? 'bg-amber-100 text-amber-800'
-                        : 'bg-gray-100 text-gray-600'
-                    }`}
-                  >
-                    {device.updateStatus === 'current'
-                      ? 'Current'
-                      : device.updateStatus === 'needs-update'
-                      ? 'Needs Update'
-                      : 'Pending'}
+                <td className="py-3.5 px-4">
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-semibold" style={device.updateStatus === 'current' ? { background: 'rgba(143,191,138,0.08)', color: '#8FBF8A', border: '1px solid rgba(143,191,138,0.2)' } : { background: 'rgba(224,144,64,0.08)', color: '#E09040', border: '1px solid rgba(224,144,64,0.2)' }}>
+                    {device.updateStatus === 'current' ? 'Current' : 'Update'}
                   </span>
                 </td>
-                <td className="py-4 px-4 text-right">
-                  {device.status === 'online' ? (
-                    <motion.a
-                      href={`vnc://${device.ipAddress}`}
-                      className="inline-flex items-center gap-2 px-3 py-1.5 bg-[var(--charcoal-accent)] text-white rounded-lg text-xs transition-all duration-300 relative overflow-hidden group"
-                      title="Connect via Apple Remote Desktop"
-                      whileHover={{ scale: 1.05, boxShadow: '0 0 20px var(--charcoal-glow)' }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <motion.div
-                        whileHover={{ rotate: 360 }}
-                        transition={{ duration: 0.5 }}
-                      >
-                        <Monitor size={14} strokeWidth={2} />
-                      </motion.div>
-                      Connect
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 group-hover:animate-[shimmer_1.5s_ease-in-out]" />
+                <td className="py-3.5 px-4 text-right">
+                  {device.status === 'online' && device.ipAddress !== '—' ? (
+                    <motion.a href={`vnc://${device.ipAddress}`} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium" title="Apple Remote Desktop" style={{ background: 'rgba(224,112,96,0.08)', color: '#E07060', border: '1px solid rgba(224,112,96,0.2)' }} whileHover={{ background: 'rgba(224,112,96,0.15)', boxShadow: '0 0 16px rgba(224,112,96,0.2)' }} whileTap={{ scale: 0.96 }}>
+                      <Monitor size={12} /> Connect
                     </motion.a>
-                  ) : (
-                    <span className="text-xs text-[var(--muted-foreground)]">Offline</span>
-                  )}
+                  ) : <span className="text-xs" style={{ color: 'var(--muted-foreground)', opacity: 0.3 }}>—</span>}
                 </td>
               </motion.tr>
             ))}
           </tbody>
         </table>
-      </div>
+      )}
 
-      <div className="mt-4 p-3 rounded-[0.875rem] bg-[var(--background)] border border-[var(--border)] text-center">
-        <p className="text-xs text-[var(--muted-foreground)]">
-          🔗 Connect to Jamf Pro API via Supabase for live device inventory and IP addresses
-        </p>
-      </div>
+      {fetchState === 'success' && (
+        <div className="px-5 py-3 flex items-center justify-center gap-2" style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
+          <div className="w-1 h-1 rounded-full animate-pulse" style={{ background: '#8FBF8A' }} />
+          <p className="text-[10px]" style={{ color: 'var(--muted-foreground)', opacity: 0.5 }}>Live · gapinc.jamfcloud.com</p>
+        </div>
+      )}
     </motion.div>
   );
 }

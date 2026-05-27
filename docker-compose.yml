@@ -1,0 +1,25 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_DB: photoops
+      POSTGRES_USER: photoops
+      POSTGRES_PASSWORD: photoops
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      DATABASE_URL: postgresql+asyncpg://photoops:photoops@db:5432/photoops
+    ports:
+      - "3000:8000"
+    depends_on:
+      - db
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

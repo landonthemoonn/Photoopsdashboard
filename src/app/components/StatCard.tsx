@@ -12,115 +12,89 @@ interface StatCardProps {
 
 const variantStyles = {
   yellow: {
-    bg: 'var(--yellow-accent)',
-    text: '#2A2520',
-    iconBg: 'rgba(42, 37, 32, 0.08)',
-    glow: 'var(--yellow-glow)',
-    gradient: 'linear-gradient(135deg, var(--yellow-accent) 0%, #FFC93D 100%)'
+    accent: '#E8C070',
+    glow: 'rgba(232, 192, 112, 0.25)',
+    iconBg: 'rgba(232, 192, 112, 0.1)',
+    border: 'rgba(232, 192, 112, 0.18)',
+    topLine: 'linear-gradient(90deg, transparent, #E8C070, transparent)',
   },
   orange: {
-    bg: 'var(--orange-accent)',
-    text: '#FDFCFA',
-    iconBg: 'rgba(253, 252, 250, 0.15)',
-    glow: 'var(--orange-glow)',
-    gradient: 'linear-gradient(135deg, var(--orange-accent) 0%, #FF8566 100%)'
+    accent: '#E09040',
+    glow: 'rgba(224, 144, 64, 0.25)',
+    iconBg: 'rgba(224, 144, 64, 0.1)',
+    border: 'rgba(224, 144, 64, 0.18)',
+    topLine: 'linear-gradient(90deg, transparent, #E09040, transparent)',
   },
   coral: {
-    bg: 'var(--coral-accent)',
-    text: '#2A2520',
-    iconBg: 'rgba(42, 37, 32, 0.08)',
-    glow: 'var(--coral-glow)',
-    gradient: 'linear-gradient(135deg, var(--coral-accent) 0%, #FFB3C1 100%)'
+    accent: '#D86040',
+    glow: 'rgba(216, 96, 64, 0.25)',
+    iconBg: 'rgba(216, 96, 64, 0.1)',
+    border: 'rgba(216, 96, 64, 0.18)',
+    topLine: 'linear-gradient(90deg, transparent, #D86040, transparent)',
   },
   charcoal: {
-    bg: 'var(--charcoal-accent)',
-    text: '#FDFCFA',
-    iconBg: 'rgba(253, 252, 250, 0.1)',
-    glow: 'var(--charcoal-glow)',
-    gradient: 'linear-gradient(135deg, var(--charcoal-accent) 0%, #3D3530 100%)'
+    accent: '#F0A870',
+    glow: 'rgba(240, 168, 112, 0.25)',
+    iconBg: 'rgba(240, 168, 112, 0.1)',
+    border: 'rgba(240, 168, 112, 0.18)',
+    topLine: 'linear-gradient(90deg, transparent, #F0A870, transparent)',
   },
   neutral: {
-    bg: 'var(--neutral-card)',
-    text: '#2A2520',
-    iconBg: 'rgba(42, 37, 32, 0.04)',
-    glow: 'rgba(42, 37, 32, 0.1)',
-    gradient: 'linear-gradient(135deg, var(--neutral-card) 0%, #F5F1EB 100%)'
-  }
+    accent: '#9888C8',
+    glow: 'rgba(152, 136, 200, 0.22)',
+    iconBg: 'rgba(152, 136, 200, 0.1)',
+    border: 'rgba(152, 136, 200, 0.18)',
+    topLine: 'linear-gradient(90deg, transparent, #9888C8, transparent)',
+  },
 };
 
-export function StatCard({
-  title,
-  value,
-  subtitle,
-  icon: Icon,
-  variant = 'neutral',
-  delay = 0
-}: StatCardProps) {
-  const styles = variantStyles[variant];
+export function StatCard({ title, value, subtitle, icon: Icon, variant = 'neutral', delay = 0 }: StatCardProps) {
+  const s = variantStyles[variant];
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay }}
-      whileHover={{ scale: 1.03, y: -6 }}
-      className="rounded-[1.5rem] p-7 shadow-sm border border-[var(--border)] transition-all duration-300 cursor-default relative overflow-hidden group"
+      transition={{ duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] }}
+      whileHover={{ y: -5, boxShadow: `0 20px 50px ${s.glow}, 0 0 0 1px ${s.border}` }}
+      className="relative overflow-hidden cursor-default"
       style={{
-        background: styles.gradient,
-        boxShadow: `0 4px 20px ${styles.glow}`
+        background: 'rgba(22, 16, 12, 0.6)',
+        backdropFilter: 'blur(28px) saturate(140%)',
+        WebkitBackdropFilter: 'blur(28px) saturate(140%)',
+        borderRadius: 'var(--radius)',
+        border: `1px solid ${s.border}`,
+        padding: '1.5rem',
+        boxShadow: `0 4px 30px rgba(0,0,0,0.5)`,
+        transition: 'box-shadow 0.3s ease, transform 0.3s ease',
       }}
     >
-      {/* Shimmer effect on hover */}
-      <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-        style={{
-          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
-          backgroundSize: '200% 100%',
-          animation: 'shimmer 2s infinite'
-        }}
-      />
+      <div className="absolute top-0 left-0 right-0 h-px" style={{ background: s.topLine, opacity: 0.7 }} />
+      <div className="absolute -top-12 -right-12 w-36 h-36 rounded-full pointer-events-none" style={{ background: s.accent, opacity: 0.05, filter: 'blur(28px)' }} />
 
-      <div className="flex items-start justify-between mb-6 relative z-10">
-        <motion.div
-          className="w-12 h-12 rounded-[0.875rem] flex items-center justify-center"
-          style={{ backgroundColor: styles.iconBg }}
-          whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Icon size={22} strokeWidth={2} style={{ color: styles.text }} />
-        </motion.div>
-      </div>
-
-      <div className="relative z-10">
-        <motion.div
-          className="text-4xl font-medium mb-2 tracking-tight"
-          style={{ color: styles.text }}
-          whileHover={{ scale: 1.05 }}
-          transition={{ type: "spring", stiffness: 300 }}
-        >
-          {value}
-        </motion.div>
-        <div
-          className="text-sm mb-1"
-          style={{ color: styles.text, opacity: 0.9 }}
-        >
+      <div className="flex items-start justify-between mb-5">
+        <p className="text-[10px] font-semibold tracking-[0.14em] uppercase" style={{ color: 'var(--muted-foreground)' }}>
           {title}
+        </p>
+        <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: s.iconBg, border: `1px solid ${s.border}` }}>
+          <Icon size={15} strokeWidth={2} style={{ color: s.accent }} />
         </div>
-        {subtitle && (
-          <div
-            className="text-xs"
-            style={{ color: styles.text, opacity: 0.6 }}
-          >
-            {subtitle}
-          </div>
-        )}
       </div>
 
-      {/* Ambient glow effect */}
-      <div
-        className="absolute -inset-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl -z-10"
-        style={{ background: styles.glow }}
-      />
+      <motion.div
+        className="text-4xl font-light tracking-tight mb-1.5"
+        style={{ color: s.accent, fontFamily: "'DM Mono', monospace", letterSpacing: '-0.03em', textShadow: `0 0 24px ${s.glow}` }}
+        whileHover={{ scale: 1.04 }}
+        transition={{ type: 'spring', stiffness: 300 }}
+      >
+        {value}
+      </motion.div>
+
+      {subtitle && (
+        <p className="text-xs" style={{ color: 'var(--muted-foreground)', letterSpacing: '0.01em' }}>
+          {subtitle}
+        </p>
+      )}
     </motion.div>
   );
 }
